@@ -36,6 +36,8 @@ class Particle:
             self._advance_verlet(dt)
             # For Verlet, we'll need to store self.accel_prev (previous acceleration).
             # We must add that attribute to __init__ and initialize it to zero.
+        elif method == 'rk4':
+            self._advance_rk4(dt)
         else:
             raise ValueError(f"Unknown integration method: {method}")
     
