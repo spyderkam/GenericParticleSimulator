@@ -25,6 +25,9 @@ class Particle:
         self.radius = radius
         self.force = np.array([0.0, 0.0])            # [fx, fy] accumulator
 
+    #def reset_force(self):
+     #   self.force = np.array([0.0, 0.0])
+
     def advance(self, dt, method='euler'):
         """Update position and velocity using accumulated forces."""
         if method == 'euler':
@@ -40,3 +43,11 @@ class Particle:
         acceleration = self.force / self.mass
         self.vel += acceleration * dt
         self.pos += self.vel * dt
+
+    def apply_forces(self, dt, *forces, method='euler'):
+        """Apply forces, advance particle, then reset force accumulator."""
+        self.force[:] = 0.0
+        for f in forces:
+            self.force += f
+        self.advance(dt, method=method)
+        self.force[:] = 0.0
