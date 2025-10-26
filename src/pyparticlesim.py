@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import numpy as np
+
 
 class Particle:
     """
@@ -53,6 +55,16 @@ class Particle:
             self.force += f
         self.advance(dt, method=method)
         self.force[:] = 0.0
+
+
+class Simulation:
+    """2D particle simulation engine with force accumulation and time-stepping."""
+    
+    def __init__(self, particles, dt):
+        self.particles = particles  # List of Particle objects
+        self.dt = dt
+        self.time = 0.0             # Current simulation time
+
 
 
 if __name__ == "__main__":
