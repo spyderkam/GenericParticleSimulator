@@ -1,10 +1,10 @@
-# ParticleSim
+# PyParticleSim
 
 A general-purpose 2D particle simulation framework written in Python.
 
 ## Overview
 
-ParticleSim provides a modular, extensible framework for simulating systems of many particles. The architecture is designed to handle diverse physics domains including molecular dynamics, debris cloud propagation, n-body gravitational systems, and more.
+PyParticleSim provides a modular, extensible framework for simulating systems of many particles. The architecture is designed to handle diverse physics domains including molecular dynamics, debris cloud propagation, n-body gravitational systems, and more.
 
 ## Features
 
