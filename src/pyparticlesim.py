@@ -75,8 +75,8 @@ class Simulation:
                     forces.append(f(particle))
                 else:
                     forces.append(f)  # Pre-computed array
-            particle.apply_forces(self.Δt, *forces)
-        self.time += self.Δt
+            particle.apply_forces(self.dt, *forces)
+        self.time += self.dt
     
     def run(self, n_steps: int, *forces):
         """Run simulation for n_steps."""

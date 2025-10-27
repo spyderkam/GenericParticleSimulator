@@ -17,3 +17,7 @@ plt.show()
 
 **Animation - track positions over time:**
 Store positions at each timestep in `Simulation.run()` for trajectory plots.
+
+***
+
+Print before and after $(x_i, y_i)$ position of each particle $p_i$.
