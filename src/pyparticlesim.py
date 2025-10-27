@@ -44,9 +44,9 @@ class Particle:
             raise ValueError(f"Unknown integration method: {method}")
     
     def _advance_euler(self, Δt):
-        acceleration = self.force / self.mass
-        self.vel += acceleration * Δt
-        self.pos += self.vel * Δt
+        acceleration = self.force/self.mass
+        self.vel += acceleration*Δt
+        self.pos += self.vel*Δt
 
     def apply_forces(self, Δt, *forces, method='euler'):
         """Apply forces, advance particle, then reset force accumulator."""
@@ -77,6 +77,7 @@ class Simulation:
         for _ in range(n_steps):
             self.step(*forces)
 
+
 class Particle_Structure:
     """Generate initial particle configurations in various geometric structures."""
 
@@ -105,8 +106,8 @@ class Particle_Structure:
         """Generate particles uniformly distributed on a circle."""
         center_x, center_y, radius = init_points
         φ = np.linspace(0, 2*np.pi, nParticles, endpoint=False)
-        x = center_x + radius * np.cos(φ)
-        y = center_y + radius * np.sin(φ)
+        x = center_x + radius*np.cos(φ)
+        y = center_y + radius*np.sin(φ)
         particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
@@ -122,16 +123,17 @@ class Particle_Structure:
 
     def gen_rectangle(self, init_points, nParticles, tilt=None):
         """Generate particles uniformly distributed on rectangle perimeter."""
+        
         bottom_left_x, bottom_left_y, x_length, y_length = init_points
         
         # Calculate perimeter
-        perimeter = 2 * (x_length + y_length)
+        perimeter = 2*(x_length + y_length)
         
         # Distribute particles proportionally along each side
-        n_bottom = int(nParticles * x_length / perimeter)
-        n_right = int(nParticles * y_length / perimeter)
-        n_top = int(nParticles * x_length / perimeter)
-        n_left = nParticles - (n_bottom + n_right + n_top)  # Remainder
+        n_bottom = int(nParticles*x_length/perimeter)
+        n_right  = int(nParticles*y_length/perimeter)
+        n_top    = int(nParticles*x_length/perimeter)
+        n_left   = nParticles - (n_bottom + n_right + n_top)  # Remainder
         
         # Bottom side
         x_bottom = np.linspace(bottom_left_x, bottom_left_x + x_length, n_bottom, endpoint=False)
