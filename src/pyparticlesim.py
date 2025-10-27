@@ -21,8 +21,8 @@ class Particle:
             radius   : particle radius (default: 1.0)
         """
         
-        self.pos = np.array(position, Δtype=float)   # [x, y]
-        self.vel = np.array(velocity, Δtype=float)   # [vx, vy]
+        self.pos = np.array(position, dtype=float)   # [x, y]
+        self.vel = np.array(velocity, dtype=float)   # [vx, vy]
         self.mass = mass
         self.radius = radius
         self.force = np.array([0.0, 0.0])            # [fx, fy] accumulator
@@ -95,7 +95,9 @@ class Particle_Structure:
         x = center_x + radius * np.cos(φ)
         y = center_y + radius * np.sin(φ)
         particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
+        #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
+        
 
     def gen_line(self, init_points, nParticles):
         """Generate particles uniformly distributed along a line segment."""
@@ -103,5 +105,6 @@ class Particle_Structure:
         x = np.linspace(start_x, end_x, nParticles)
         y = np.linspace(start_y, end_y, nParticles)
         particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
+        #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
         
