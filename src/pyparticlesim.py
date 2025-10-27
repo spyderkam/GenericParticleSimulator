@@ -66,11 +66,17 @@ class Simulation:
         self.dt = dt
         self.time = 0.0
 
-    def step(self, *forces):
+    def step(self, *force_funcs):
         """Advance simulation by one timestep."""
         for particle in self.particles:
-            particle.apply_forces(self.dt, *forces)
-        self.time += self.dt
+            forces = []
+            for f in force_funcs:
+                if callable(f):
+                    forces.append(f(particle))
+                else:
+                    forces.append(f)  # Pre-computed array
+            particle.apply_forces(self.Δt, *forces)
+        self.time += self.Δt
     
     def run(self, n_steps: int, *forces):
         """Run simulation for n_steps."""
@@ -128,29 +134,23 @@ class Particle_Structure:
         
         # Calculate perimeter
         perimeter = 2*(x_length + y_length)
-        
         # Distribute particles proportionally along each side
         n_bottom = int(nParticles*x_length/perimeter)
         n_right  = int(nParticles*y_length/perimeter)
         n_top    = int(nParticles*x_length/perimeter)
         n_left   = nParticles - (n_bottom + n_right + n_top)  # Remainder
-        
         # Bottom side
         x_bottom = np.linspace(bottom_left_x, bottom_left_x + x_length, n_bottom, endpoint=False)
         y_bottom = np.full(n_bottom, bottom_left_y)
-        
         # Right side
         x_right = np.full(n_right, bottom_left_x + x_length)
         y_right = np.linspace(bottom_left_y, bottom_left_y + y_length, n_right, endpoint=False)
-        
         # Top side
         x_top = np.linspace(bottom_left_x + x_length, bottom_left_x, n_top, endpoint=False)
         y_top = np.full(n_top, bottom_left_y + y_length)
-        
         # Left side
         x_left = np.full(n_left, bottom_left_x)
         y_left = np.linspace(bottom_left_y + y_length, bottom_left_y, n_left, endpoint=False)
-        
         # Concatenate all sides
         x = np.concatenate([x_bottom, x_right, x_top, x_left])
         y = np.concatenate([y_bottom, y_right, y_top, y_left])
