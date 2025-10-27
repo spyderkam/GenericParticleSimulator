@@ -81,6 +81,37 @@ for particle in sim.particles:
     print(particle.pos)
 ```
 
+### User-Defined Force Functions
+
+Define force functions that return `[Fx, Fy]` arrays:
+
+```python
+def gravity(particle: Particle) -> np.ndarray:
+    """Gravitational force (no parameters needed)."""
+    return np.array([0.0, -9.81 * particle.mass])
+
+def drag(particle: Particle, b: float) -> np.ndarray:
+    """Velocity-dependent drag force."""
+    return -b * particle.vel
+
+def spring(particle: Particle, anchor: np.ndarray, k: float, L0: float) -> np.ndarray:
+    """Spring force toward anchor point with rest length L0."""
+    delta = particle.pos - anchor
+    r = np.linalg.norm(delta)
+    if r == 0:
+        return np.array([0.0, 0.0])
+    return -k * (r - L0) * (delta / r)
+
+# Apply multiple forces
+for particle in sim.particles:
+    particle.apply_forces(
+        dt=0.01,
+        gravity(particle),
+        drag(particle, b=0.5),
+        spring(particle, np.array([0, 0]), k=10.0, L0=1.0)
+    )
+```
+
 ## Project Status
 
 🚧 **v0.1.0** - Active development
