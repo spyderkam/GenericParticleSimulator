@@ -89,13 +89,15 @@ class Particle_Structure:
         if structure == 'circle':
             if len(init_points) != 3:
                 raise ValueError("Circle structure requires 3 values: [center_x, center_y, radius]")
-            self.particles = self.gen_circle(init_points, nParticles)
-            
+            self.particles = self.gen_circle(init_points, nParticles)           
         elif structure == 'line':
             if len(init_points) != 4:
                 raise ValueError("Line structure requires 4 values: [start_x, start_y, end_x, end_y]")
             self.particles = self.gen_line(init_points, nParticles)
-            
+        elif structure == 'rectangle':
+            if len(init_points) != 4:
+                raise ValueError("Rectangle structure requires 4 values: [bottom_left_x, bottom_left_y, x_length, y_length]")
+            self.particles = self.gen_rectangle(init_points, nParticles)
         else:
             raise ValueError(f"Unknown structure: {structure}")
 
@@ -116,4 +118,40 @@ class Particle_Structure:
         y = np.linspace(start_y, end_y, nParticles)
         particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
+        return particles
+
+    def gen_rectangle(self, init_points, nParticles, tilt=None):
+        """Generate particles uniformly distributed on rectangle perimeter."""
+        bottom_left_x, bottom_left_y, x_length, y_length = init_points
+        
+        # Calculate perimeter
+        perimeter = 2 * (x_length + y_length)
+        
+        # Distribute particles proportionally along each side
+        n_bottom = int(nParticles * x_length / perimeter)
+        n_right = int(nParticles * y_length / perimeter)
+        n_top = int(nParticles * x_length / perimeter)
+        n_left = nParticles - (n_bottom + n_right + n_top)  # Remainder
+        
+        # Bottom side
+        x_bottom = np.linspace(bottom_left_x, bottom_left_x + x_length, n_bottom, endpoint=False)
+        y_bottom = np.full(n_bottom, bottom_left_y)
+        
+        # Right side
+        x_right = np.full(n_right, bottom_left_x + x_length)
+        y_right = np.linspace(bottom_left_y, bottom_left_y + y_length, n_right, endpoint=False)
+        
+        # Top side
+        x_top = np.linspace(bottom_left_x + x_length, bottom_left_x, n_top, endpoint=False)
+        y_top = np.full(n_top, bottom_left_y + y_length)
+        
+        # Left side
+        x_left = np.full(n_left, bottom_left_x)
+        y_left = np.linspace(bottom_left_y + y_length, bottom_left_y, n_left, endpoint=False)
+        
+        # Concatenate all sides
+        x = np.concatenate([x_bottom, x_right, x_top, x_left])
+        y = np.concatenate([y_bottom, y_right, y_top, y_left])
+        
+        particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
         return particles
