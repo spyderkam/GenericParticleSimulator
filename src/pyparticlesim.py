@@ -30,47 +30,47 @@ class Particle:
     #def reset_force(self):
     #    self.force = np.array([0.0, 0.0])
 
-    def advance(self, Δt, method='euler'):
+    def advance(self, dt, method='euler'):
         """Update position and velocity using accumulated forces."""
         if method == 'euler':
-            self._advance_euler(Δt)
+            self._advance_euler(dt)
         elif method == 'verlet':
-            self._advance_verlet(Δt)
+            self._advance_verlet(dt)
             # For Verlet, we'll need to store self.accel_prev (previous acceleration).
             # We must add that attribute to __init__ and initialize it to zero.
         elif method == 'rk4':
-            self._advance_rk4(Δt)
+            self._advance_rk4(dt)
         else:
             raise ValueError(f"Unknown integration method: {method}")
     
-    def _advance_euler(self, Δt):
+    def _advance_euler(self, dt):
         acceleration = self.force/self.mass
-        self.vel += acceleration*Δt
-        self.pos += self.vel*Δt
+        self.vel += acceleration*dt
+        self.pos += self.vel*dt
 
-    def apply_forces(self, Δt, *forces, method='euler'):
+    def apply_forces(self, dt, *forces, method='euler'):
         """Apply forces, advance particle, then reset force accumulator."""
         forces = np.array(forces)     # Make sure array of forces is a NumPy array
         self.force[:] = 0.0
         for f in forces:
             self.force += f
-        self.advance(Δt, method=method)
+        self.advance(dt, method=method)
         self.force[:] = 0.0
 
 
 class Simulation:
     """2D particle simulation engine with force accumulation and time-stepping."""
     
-    def __init__(self, particles, Δt):
-        self.particles = particles  # List of Particle objects
-        self.Δt = Δt
+    def __init__(self, particles, dt):
+        self.particles = np.array(particles)  # Array of Particle objects
+        self.dt = dt
         self.time = 0.0
 
     def step(self, *forces):
         """Advance simulation by one timestep."""
         for particle in self.particles:
-            particle.apply_forces(self.Δt, *forces)
-        self.time += self.Δt
+            particle.apply_forces(self.dt, *forces)
+        self.time += self.dt
     
     def run(self, n_steps: int, *forces):
         """Run simulation for n_steps."""
