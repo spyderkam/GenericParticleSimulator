@@ -64,7 +64,18 @@ class Simulation:
     def __init__(self, particles, Δt):
         self.particles = particles  # List of Particle objects
         self.Δt = Δt
+        self.time = 0.0
 
+    def step(self, *forces):
+        """Advance simulation by one timestep."""
+        for particle in self.particles:
+            particle.apply_forces(self.Δt, *forces)
+        self.time += self.Δt
+    
+    def run(self, n_steps: int, *forces):
+        """Run simulation for n_steps."""
+        for _ in range(n_steps):
+            self.step(*forces)
 
 class Particle_Structure:
     """Generate initial particle configurations in various geometric structures."""
@@ -97,7 +108,6 @@ class Particle_Structure:
         particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
-        
 
     def gen_line(self, init_points, nParticles):
         """Generate particles uniformly distributed along a line segment."""
@@ -107,4 +117,3 @@ class Particle_Structure:
         particles = np.array([Particle(position=[x[i], y[i]]) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
-        

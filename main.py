@@ -13,7 +13,13 @@ p.apply_forces(dt, f1, f2)  # f vs. f1, f2
 print(p.pos, p.vel)
 
 print("\nParticle Structure Example:")
-part_struct = Particle_Structure(structure='circle', init_points=[0.0, 0.0, 1.0], nParticles=10)
+part_struct = Particle_Structure(structure='line', init_points=[0.0, 0.0, 1.0, 2.0], nParticles=10)
 particles = part_struct.particles
 for particle in particles:
     print(particle.pos)
+
+print("\nSimulation Example:")
+sim = Simulation(particles, dt)
+sim.run(10, f) # f vs. f1, f2
+for particle in sim.particles:
+     print(particle.pos, particle.vel)
