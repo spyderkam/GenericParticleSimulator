@@ -2,6 +2,8 @@
 
 A general-purpose 2D particle simulation framework written in Python.
 
+**Current Version:** v0.1.0
+
 ## Overview
 
 PyParticleSim provides a modular, extensible framework for simulating systems of many particles. The architecture is designed to handle diverse physics domains including molecular dynamics, debris cloud propagation, n-body gravitational systems, and more.
@@ -10,15 +12,18 @@ PyParticleSim provides a modular, extensible framework for simulating systems of
 
 - **Generalized Particle Class**: Base particle representation with position, velocity, mass, and radius
 - **Force Accumulator Pattern**: Clean separation of force calculations from integration
+- **Euler Integration**: Time-stepping with Euler method (Verlet and RK4 support planned)
+- **Particle Structure Generator**: Create initial configurations (line, circle, rectangle)
+- **Simulation Engine**: Time-stepping loop with `step()` and `run()` methods
 - **NumPy-based**: Efficient numerical computations
 - **Modular Design**: Easy to extend with new force models and integrators
 
 ## Core Components
 
-- `Particle`: Base 2D particle class
-- `Simulation`: Simulation engine (coming soon)
+- `Particle`: Base 2D particle class with force accumulator
+- `Simulation`: Time-stepping engine for advancing particle systems
+- `Particle_Structure`: Geometric initialization (line, circle, rectangle)
 - `ForceField`: Pluggable physics models (coming soon)
-- `Integrator`: Time-stepping algorithms (coming soon)
 
 ## Requirements
 
@@ -31,14 +36,64 @@ pip install numpy
 ```
 
 ## Usage
-```python
-from particle import Particle
 
-# Create a particle at position (1.0, 2.0)
-p = Particle(position=[1.0, 2.0], mass=2.5, radius=0.5)
+### Basic Particle
+```python
+from src.pyparticlesim import Particle
+import numpy as np
+
+# Create and advance a single particle
+p = Particle(position=[0.0, 0.0], velocity=[1.0, 1.0], mass=1.0)
+f_gravity = np.array([0.0, -9.8])
+f_wind = np.array([1.0, 0.0])
+p.apply_forces(dt=0.1, f_gravity, f_wind)
+print(p.pos, p.vel)
+```
+
+### Particle Structure
+```python
+from src.pyparticlesim import Particle_Structure
+
+# Line of 10 particles
+line = Particle_Structure('line', init_points=[0, 0, 1, 1], nParticles=10)
+
+# Circle of 20 particles
+circle = Particle_Structure('circle', init_points=[0, 0, 1.5], nParticles=20)
+
+# Rectangle of 16 particles
+rect = Particle_Structure('rectangle', init_points=[0, 0, 2, 1], nParticles=16)
+```
+
+### Simulation
+```python
+from src.pyparticlesim import Simulation
+
+# Create particle structure
+ps = Particle_Structure('circle', [0, 0, 1.0], 10)
+
+# Initialize and run simulation
+sim = Simulation(ps.particles, Δt=0.01)
+f = np.array([0.0, -9.8])  # Apply gravity
+sim.run(100, f)  # Run for 100 timesteps
+
+# Check final positions
+for particle in sim.particles:
+    print(particle.pos)
 ```
 
 ## Project Status
 
-🚧 In active development
+🚧 **v0.1.0** - Active development
 
+**Implemented:**
+- Particle class with Euler integration
+- Force accumulator pattern
+- Simulation time-stepping engine
+- Geometric structure generators (line, circle, rectangle)
+
+**Planned:**
+- Verlet and RK4 integrators
+- Force field classes (gravity, springs, drag, collisions)
+- Boundary conditions
+- Energy/momentum diagnostics
+- Visualization utilities
