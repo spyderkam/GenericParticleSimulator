@@ -87,14 +87,14 @@ class Simulation:
 class Particle_Structure:
     """Generate initial particle configurations in various geometric structures."""
 
-    def __init__(self, structure='circle', init_points=None, nParticles=10, velocity=(0.0, 0.0), mass=1.0, radius=1.0):
+    def __init__(self, structure='circle', init_points=None, nParticles=10, particle_vel=(0.0, 0.0), particle_mass=1.0, particle_radius=1.0):
         if init_points is None:
             raise ValueError("init_points cannot be None")
         
         # Uniform structure properties
-        self.velocity = velocity
-        self.mass = mass
-        self.radius = radius
+        self.particle_vel = particle_vel
+        self.particle_mass = particle_mass
+        self.particle_radius = particle_radius
         
         init_points = np.array(init_points).flatten()
     
@@ -119,7 +119,7 @@ class Particle_Structure:
         φ = np.linspace(0, 2*np.pi, nParticles, endpoint=False)
         x = center_x + circle_radius*np.cos(φ)
         y = center_y + circle_radius*np.sin(φ)
-        particles = np.array([Particle(position=[x[i], y[i]], velocity=self.velocity, mass=self.mass, radius=self.radius) for i in range(nParticles)])
+        particles = np.array([Particle(position=[x[i], y[i]], velocity=self.particle_vel, mass=self.particle_mass, radius=self.particle_radius) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
 
@@ -128,7 +128,7 @@ class Particle_Structure:
         start_x, start_y, end_x, end_y = init_points
         x = np.linspace(start_x, end_x, nParticles)
         y = np.linspace(start_y, end_y, nParticles)
-        particles = np.array([Particle(position=[x[i], y[i]], velocity=self.velocity, mass=self.mass, radius=self.radius) for i in range(nParticles)])
+        particles = np.array([Particle(position=[x[i], y[i]], velocity=self.particle_vel, mass=self.particle_mass, radius=self.particle_radius) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
         return particles
 
@@ -160,5 +160,5 @@ class Particle_Structure:
         x = np.concatenate([x_bottom, x_right, x_top, x_left])
         y = np.concatenate([y_bottom, y_right, y_top, y_left])
         
-        particles = np.array([Particle(position=[x[i], y[i]], velocity=self.velocity, mass=self.mass, radius=self.radius) for i in range(nParticles)])
+        particles = np.array([Particle(position=[x[i], y[i]], velocity=self.particle_vel, mass=self.particle_mass, radius=self.particle_radius) for i in range(nParticles)])
         return particles
