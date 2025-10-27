@@ -86,8 +86,8 @@ for particle in sim.particles:
 Define force functions that return `[Fx, Fy]` arrays:
 
 ```python
-def gravity(particle: Particle) -> np.ndarray:
-    """Gravitational force (no parameters needed)."""
+def weight(particle: Particle) -> np.ndarray:
+    """Gravitational weight force (no parameters needed)."""
     return np.array([0.0, -9.81 * particle.mass])
 
 def drag(particle: Particle, b: float) -> np.ndarray:
