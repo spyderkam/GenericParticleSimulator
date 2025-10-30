@@ -22,13 +22,12 @@ def generic_central_force(particle1: Particle, particle2: Particle, k=1.0):
 
 # ***
 
-# Diamond: center at origin, 2 units wide, 3 units tall
-diamond = Particle_Structure('diamond', init_points=[0, 0, 3.0, 5.0], nParticles=100)
-positions = [particle.pos for particle in diamond.particles]
+circle = Particle_Structure('solid_circle', init_points=[0.0, 0.0, 1.0], nParticles=1200)
+positions = [particle.pos for particle in circle.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
-
+plt.axis('equal')
 plt.tight_layout()
-plt.savefig('diamond_plot.pdf', bbox_inches='tight')
-plt.show()
-plt.close()
+#plt.show()
+plt.savefig('solid_diamond.pdf', bbox_inches='tight')
+#plt.close()

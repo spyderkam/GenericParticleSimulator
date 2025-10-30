@@ -114,6 +114,14 @@ class Particle_Structure:
             if len(init_points) != 4:
                 raise ValueError("Diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
             self.particles = self.gen_diamond(init_points, nParticles)
+        elif structure == 'solid_circle':
+            if len(init_points) != 3:
+                raise ValueError("Solid circle structure requires 3 values: [center_x, center_y, radius]")
+            self.particles = self.gen_solid_circle(init_points, nParticles)
+        elif structure == 'solid_diamond':
+            if len(init_points) != 4:
+                raise ValueError("Solid diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
+            self.particles = self.gen_solid_diamond(init_points, nParticles)
         elif structure == 'tilted_rectangle':
             raise NotImplementedError('Diamond structure not implemented yet')
         else:
@@ -136,8 +144,7 @@ class Particle_Structure:
         Diamond with horizontal and vertical diagonals aligned with axes.
         
         Args:
-            init_points: [center_x, center_y, x_length, y_length] where
-                         x_length is full width, y_length is full height
+            init_points: [center_x, center_y, x_length, y_length] where x_length is full width, y_length is full height
             nParticles: total number of particles to distribute
             tilt: reserved for future rotation (not implemented)
         """
@@ -233,3 +240,70 @@ class Particle_Structure:
         
         particles = np.array([Particle(position=[x[i], y[i]], velocity=self.particle_vel, mass=self.particle_mass, radius=self.particle_radius) for i in range(nParticles)])
         return particles
+
+    def gen_solid_circle(self, init_points, nParticles):
+        """
+        Generate particles uniformly distributed inside a solid circle.
+        
+        Uses square root sampling for uniform area distribution.
+        
+        Args:
+            init_points: [center_x, center_y, radius]
+            nParticles: total number of particles to distribute
+        """
+        
+        center_x, center_y, radius = init_points
+        
+        # Uniform sampling in polar coordinates
+        # r ~ sqrt(U[0,1]) for uniform area density
+        # φ ~ U[0, 2π]
+        r = radius * np.sqrt(np.random.uniform(0, 1, nParticles))
+        φ = np.random.uniform(0, 2*np.pi, nParticles)
+        
+        x = center_x + r * np.cos(φ)
+        y = center_y + r * np.sin(φ)
+        
+        particles = np.array([
+            Particle(
+                position=[x[i], y[i]], 
+                velocity=self.particle_vel, 
+                mass=self.particle_mass, 
+                radius=self.particle_radius
+            ) for i in range(nParticles)
+        ])
+        
+        return particles
+
+    def gen_solid_diamond(self, init_points, nParticles, tilt=None):
+        """
+        Generate particles uniformly distributed inside a solid diamond.
+        
+        Uses rejection sampling within bounding box.
+        
+        Args:
+            init_points: [center_x, center_y, x_length, y_length]
+            nParticles: total number of particles to distribute
+            tilt: reserved for future rotation (not implemented)
+        """
+        
+        center_x, center_y, x_length, y_length = init_points
+        
+        particles = []
+        while len(particles) < nParticles:
+            # Sample from bounding box
+            x = np.random.uniform(center_x - x_length/2, center_x + x_length/2)
+            y = np.random.uniform(center_y - y_length/2, center_y + y_length/2)
+            
+            # Check if inside diamond: |Δx|/half_width + |Δy|/half_height ≤ 1
+            if abs(x - center_x)/(x_length/2) + abs(y - center_y)/(y_length/2) <= 1:
+                particles.append(
+                    Particle(
+                        position=[x, y], 
+                        velocity=self.particle_vel, 
+                        mass=self.particle_mass, 
+                        radius=self.particle_radius
+                    )
+                )
+        
+        return np.array(particles)
+    
