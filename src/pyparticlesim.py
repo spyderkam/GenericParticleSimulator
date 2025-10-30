@@ -110,6 +110,12 @@ class Particle_Structure:
             if len(init_points) != 4:
                 raise ValueError("Rectangle structure requires 4 values: [bottom_left_x, bottom_left_y, x_length, y_length]")
             self.particles = self.gen_rectangle(init_points, nParticles)
+        elif structure == 'diamond':
+            if len(init_points) != 4:
+                raise ValueError("Diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
+            self.particles = self.gen_diamond(init_points, nParticles)
+        elif structure == 'tilted_rectangle':
+            raise NotImplementedError('Diamond structure not implemented yet')
         else:
             raise ValueError(f"Unknown structure: {structure}")
 
@@ -121,6 +127,71 @@ class Particle_Structure:
         y = center_y + circle_radius*np.sin(φ)
         particles = np.array([Particle(position=[x[i], y[i]], velocity=self.particle_vel, mass=self.particle_mass, radius=self.particle_radius) for i in range(nParticles)])
         #return np.array([particle.pos for particle in particles])   # Return positions only
+        return particles
+
+    def gen_diamond(self, init_points, nParticles, tilt=None):
+        """
+        Generate particles uniformly distributed on diamond perimeter.
+        
+        Diamond with horizontal and vertical diagonals aligned with axes.
+        
+        Args:
+            init_points: [center_x, center_y, x_length, y_length] where
+                         x_length is full width, y_length is full height
+            nParticles: total number of particles to distribute
+            tilt: reserved for future rotation (not implemented)
+        """
+        
+        center_x, center_y, x_length, y_length = init_points
+        
+        # Four vertices
+        top = np.array([center_x, center_y + y_length/2])
+        right = np.array([center_x + x_length/2, center_y])
+        bottom = np.array([center_x, center_y - y_length/2])
+        left = np.array([center_x - x_length/2, center_y])
+        
+        # Side lengths
+        side_top_right = np.linalg.norm(right - top)
+        side_right_bottom = np.linalg.norm(bottom - right)
+        side_bottom_left = np.linalg.norm(left - bottom)
+        side_left_top = np.linalg.norm(top - left)
+        perimeter = side_top_right + side_right_bottom + side_bottom_left + side_left_top
+        
+        # Distribute particles proportionally
+        n_top_right = int(nParticles * side_top_right / perimeter)
+        n_right_bottom = int(nParticles * side_right_bottom / perimeter)
+        n_bottom_left = int(nParticles * side_bottom_left / perimeter)
+        n_left_top = nParticles - (n_top_right + n_right_bottom + n_bottom_left)
+        
+        # Top to Right
+        x_tr = np.linspace(top[0], right[0], n_top_right, endpoint=False)
+        y_tr = np.linspace(top[1], right[1], n_top_right, endpoint=False)
+        
+        # Right to Bottom
+        x_rb = np.linspace(right[0], bottom[0], n_right_bottom, endpoint=False)
+        y_rb = np.linspace(right[1], bottom[1], n_right_bottom, endpoint=False)
+        
+        # Bottom to Left
+        x_bl = np.linspace(bottom[0], left[0], n_bottom_left, endpoint=False)
+        y_bl = np.linspace(bottom[1], left[1], n_bottom_left, endpoint=False)
+        
+        # Left to Top
+        x_lt = np.linspace(left[0], top[0], n_left_top, endpoint=False)
+        y_lt = np.linspace(left[1], top[1], n_left_top, endpoint=False)
+        
+        # Concatenate
+        x = np.concatenate([x_tr, x_rb, x_bl, x_lt])
+        y = np.concatenate([y_tr, y_rb, y_bl, y_lt])
+        
+        particles = np.array([
+            Particle(
+                position=[x[i], y[i]], 
+                velocity=self.particle_vel, 
+                mass=self.particle_mass, 
+                radius=self.particle_radius
+            ) for i in range(nParticles)
+        ])
+        
         return particles
 
     def gen_line(self, init_points, nParticles):
