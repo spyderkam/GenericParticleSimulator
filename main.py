@@ -29,5 +29,5 @@ plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0
 plt.axis('equal')
 plt.tight_layout()
 #plt.show()
-plt.savefig('solid_diamond.pdf', bbox_inches='tight')
+plt.savefig('solid_circle.pdf', bbox_inches='tight')
 #plt.close()
