@@ -33,7 +33,13 @@ class Particle:
     #    self.force = np.array([0.0, 0.0])
 
     def advance(self, dt, method='euler'):
-        """Update position and velocity using accumulated forces."""
+        """
+        Update position and velocity using accumulated forces.
+
+        Currently POINTLESS because:
+            Simulation.step() expects per-particle force functions, but SK_Field.compute_forces()
+            returns all forces at once, requiring a manual loop instead.
+        """
         if method == 'euler':
             self._advance_euler(dt)
         elif method == 'verlet':
