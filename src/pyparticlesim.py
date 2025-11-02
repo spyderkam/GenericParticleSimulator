@@ -33,13 +33,7 @@ class Particle:
     #    self.force = np.array([0.0, 0.0])
 
     def advance(self, dt, method='euler'):
-        """
-        Update position and velocity using accumulated forces.
-
-        Currently POINTLESS because:
-            Simulation.step() expects per-particle force functions, but SK_Field.compute_forces()
-            returns all forces at once, requiring a manual loop instead.
-        """
+        """Update position and velocity using accumulated forces."""
         if method == 'euler':
             self._advance_euler(dt)
         elif method == 'verlet':
@@ -67,7 +61,13 @@ class Particle:
 
 
 class Simulation:
-    """2D particle simulation engine with force accumulation and time-stepping."""
+    """
+    2D particle simulation engine with force accumulation and time-stepping.
+
+    USELSESS as of now:
+        Simulation.step() incompatible with SK_Field.compute_forces() which returns 
+        pre-computed force arrays instead of per-particle force functions.
+    """
     
     def __init__(self, particles, dt):
         self.particles = np.array(particles)  # Array of Particle objects
