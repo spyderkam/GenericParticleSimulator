@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Create particle structure
-circle = pps.Particle_Structure('solid_circle', init_points=[0.0, 0.0, 1.0], nParticles=1200)
+circle = pps.Particle_Structure('solid_circle', init_points=[0.0, 0.0, 1.0], nParticles=100)
 positions = [particle.pos for particle in circle.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
