@@ -77,17 +77,36 @@ class SK_Field:
     def _gravity(self, p1, p2, r, r_hat):
         """
         N-body gravitational force:
-            $$\vec{F}_{\mathrm{grav}} = -\frac{Gm_1m_2}{r^2}\hat{r}$$
+    
+            Models mutual gravitational attraction between massive particles. Newton's law of universal gravitation 
+            describes the attractive force between any two masses.
+            
+                $$
+                \vec{F}_{\mathrm{grav}} = -\frac{Gm_1m_2}{r^2}\hat{r}
+                $$
+            
+            where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $G$ is the 
+            gravitational constant, and $m_1$, $m_2$ are particle masses. Negative sign indicates attraction.
         """
         G = self.params['G']
         return -G * p1.mass * p2.mass / r**2 * r_hat
 
     def _lennard_jones(self, p1, p2, r, r_hat):
         """
-        Lennard-Jones force:
-            $$\vec{F}_{\mathrm{LJ}} = \frac{24\epsilon}{r}\left[2\left(\frac{\sigma}{r}\right)^{13} - \left(\frac{\sigma}{r}\right)^7\right]\hat{r}$$
-        where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$.
+        Lennard-Jones potential:
+
+            Used fo modeling van der Waals interactions between neutral atoms/molecules. van der Waals interactions are 
+            weak intermolecular forces from temporary charge fluctuations (dipole interactions). Attraction between 
+            neutral molecules/atoms.
+            
+                $$
+                \vec{F}_{\mathrm{LJ}} = \frac{24\epsilon}{r}\left[2\left(\frac{\sigma}{r}\right)^{13} - \left(\frac{\sigma}{r}\right)^7\right]\hat{r}
+                $$
+            
+            where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $\epsilon$ is the depth
+            of potential well (bond strength). and $\sigma$ is the distance where potential is zero (particle diameter)
         """
+        
         epsilon = self.params['epsilon']
         sigma = self.params['sigma']
         sigma_over_r = sigma / r
