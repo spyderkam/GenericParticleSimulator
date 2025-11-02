@@ -37,8 +37,8 @@ forces = field.compute_forces(particles)  # Returns array of [Fx, Fy]
 
 **Forces to Implement:**
 
--   **Lennard-Jones:** $\vec{F}_{ij} = 24\epsilon\left[\frac{2\sigma^{12}}{r_{ij}^{13}} - \frac{\sigma^6}{r_{ij}^7}\right]\hat{r}_{ij}$
--   **N-body Gravitational:** $\vec{F}_i = \sum_{j \neq i} \frac{Gm_i m_j}{r_{ij}^2}\hat{r}_{ij}$
+-   **Lennard-Jones:** $\vec{F} _{\mathrm{LJ}} = \frac{24\epsilon}{r}\left[2\left(\frac{\sigma}{r}\right)^{13} - \left(\frac{\sigma}{r}\right)^7\right]\hat{r}$
+-   **N-body Gravitational:** $\vec{F} _{\mathrm{grav}} = -\frac{Gm _1m _2}{r^2}\hat{r}$
 
 **Key Requirements:**
 
