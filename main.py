@@ -5,19 +5,14 @@ import numpy as np
 part_rad = 1.0  # Particle radius
 
 # Create particle structure
-circle = pps.Particle_Structure('solid_circle', [0.0, 0.0, 1.0], 1000, particle_radius=part_rad)
+circle = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
 positions = [particle.pos for particle in circle.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
-plt.axis('equal')
-plt.tight_layout()
-#plt.show()
-plt.savefig('init_struct.pdf', bbox_inches='tight')
-plt.close()
 
 # Create field
-# ϵ (loosely) sets interaction strength and σ should match particle diameter
-field = pps.SK_Field(epsilon=10000.0, sigma=part_rad*2)
+# ϵ (loosely) sets interaction strength and σ (= part_rad*2) should match particle diameter
+field = pps.SK_Field(G=1)
 
 # Run parameters
 simulation_time = 0
@@ -37,9 +32,14 @@ print(f"Final time: {simulation_time}")
 
 final_positions = [particle.pos for particle in circle.particles]
 
-plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'bo', label='$t=0$')
+plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={n_steps*dt}$')
 plt.axis('equal')
+plt.legend()
+
+plt.xlabel(r'$x$-axis', fontsize=15)
+plt.ylabel(r'$y$-axis', fontsize=15)
 plt.tight_layout()
+
 plt.show()
-plt.savefig('last_struc.pdf', bbox_inches='tight')
+plt.savefig('before_and_after.pdf', bbox_inches='tight')
 plt.close()
