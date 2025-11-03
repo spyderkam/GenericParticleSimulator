@@ -13,8 +13,6 @@ circle = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle
 positions = [particle.pos for particle in circle.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
-plt.xlim(-1.5, 1.5)
-plt.ylim(-1.5, 1.5)
 
 # Create field
 # ϵ (loosely) sets interaction strength and σ (= part_rad*2) should match particle diameter
@@ -36,14 +34,14 @@ final_positions = [particle.pos for particle in circle.particles]
 
 plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={n_steps*dt}$')
 
+# Plot settings
 plt.grid(True)
 plt.axis('equal')
-plt.xlim(-1.5, 1.5)
-plt.ylim(-1.5, 1.5)
-plt.legend()
-
+plt.xlim(-0.5, 1.5)
+plt.ylim(-0.5, 1.5)
 plt.xlabel(r'$x$-axis', fontsize=15)
 plt.ylabel(r'$y$-axis', fontsize=15)
+plt.legend()
 plt.tight_layout()
 
 # Record the script end time
