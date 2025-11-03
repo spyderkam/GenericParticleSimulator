@@ -60,13 +60,13 @@ class Particle:
         self.force[:] = 0.0
 
 
-class Simulation:
+class User_Simulation:
     """
     2D particle simulation engine with force accumulation and time-stepping.
-
-    USELSESS as of now:
-        Simulation.step() incompatible with SK_Field.compute_forces() which returns 
-        pre-computed force arrays instead of per-particle force functions.
+    This class is for advancing particles with user-defined forces (callabale or numeric).
+    
+    Please note that the step() method is incompatible with SK_Field.compute_forces() which 
+    returns pre-computed force arrays instead of per-particle force functions.
     """
     
     def __init__(self, particles, dt):
