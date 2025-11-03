@@ -40,6 +40,6 @@ plt.xlabel(r'$x$-axis', fontsize=15)
 plt.ylabel(r'$y$-axis', fontsize=15)
 plt.tight_layout()
 
-plt.show()
+#plt.show()
 plt.savefig('before_and_after.pdf', bbox_inches='tight')
 plt.close()
