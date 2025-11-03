@@ -35,11 +35,11 @@ for _ in range(n_steps):
 final_positions = [particle.pos for particle in circle.particles]
 
 plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={n_steps*dt}$')
-plt.xlim(-1.5, 1.5)
-plt.ylim(-1.5, 1.5)
 
 plt.grid(True)
 plt.axis('equal')
+plt.xlim(-1.5, 1.5)
+plt.ylim(-1.5, 1.5)
 plt.legend()
 
 plt.xlabel(r'$x$-axis', fontsize=15)
