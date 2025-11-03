@@ -130,8 +130,8 @@ class Particle_Structure:
             if len(init_points) != 4:
                 raise ValueError("Solid diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
             self.particles = self.gen_solid_diamond(init_points, nParticles)
-        elif structure == 'tilted_rectangle':
-            raise NotImplementedError('Diamond structure not implemented yet')
+        elif structure == 'heart':
+            raise NotImplementedError('Heart structure not implemented yet')
         else:
             raise ValueError(f"Unknown structure: {structure}")
 
