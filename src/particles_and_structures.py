@@ -49,6 +49,31 @@ class Particle:
         acceleration = self.force/self.mass
         self.vel += acceleration*dt
         self.pos += self.vel*dt
+    
+    def _advance_verlet(self, dt):
+        """
+        Velocity Verlet integration (2nd-order symplectic).
+        
+        Algorithm:
+            r(t+Δt) = r(t) + v(t)Δt + (1/2)a(t)Δt²
+            v(t+Δt) = v(t) + (1/2)[a(t) + a(t+Δt)]Δt
+        
+        Note: Requires force re-evaluation after position update.
+        Current implementation assumes forces don't change during timestep.
+        For velocity-dependent forces, this needs modification.
+        """
+        accel_current = self.force / self.mass
+        
+        # Update position
+        self.pos += self.vel * dt + 0.5 * accel_current * dt**2
+        
+        # Store current acceleration for velocity update
+        # (In full implementation, forces would be recomputed here)
+        # For now, assume acceleration stays constant over timestep
+        accel_next = accel_current  
+        
+        # Update velocity
+        self.vel += 0.5 * (accel_current + accel_next) * dt
 
     def apply_forces(self, dt, *forces, method='euler'):
         """Apply forces, advance particle, then reset force accumulator."""
@@ -314,4 +339,3 @@ class Particle_Structure:
                 )
         
         return np.array(particles)
-    
