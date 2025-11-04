@@ -13,9 +13,9 @@ import time
 
 # Parameters
 part_rad = 1.0
-G = 10.0
-dt = 0.0001
-n_steps = 5000
+G = 100.0
+dt = 6e-6
+n_steps = 1000
 
 # Record start time
 start_time = time.perf_counter()
@@ -25,7 +25,7 @@ square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle
 initial_positions = [particle.pos.copy() for particle in square.particles]
 
 # Create gravitational field
-field = pps.SK_Field(G=G, softening=0.05)
+field = pps.SK_Field(G=G, softening=0.001)
 
 # Initialize Verlet simulation
 sim = pps.Verlet_Simulation(square.particles, dt, field)
