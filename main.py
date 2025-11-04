@@ -8,10 +8,10 @@ import src.pyparticlesim as pps
 import time
 
 # Parameters
-G = 10.0           # Reduced coupling
-softening = 0.05   # Increased softening
-dt = 1e-5          # Conservative timestep
-n_steps = 10000    # Reaches t = 0.1
+G = 10.0
+softening = 0.05
+dt = 1e-5
+n_steps = 50000
 
 # Record start time
 start_time = time.perf_counter()
@@ -47,7 +47,7 @@ plt.legend()
 plt.tight_layout()
 
 # Save and report runtime
-plt.savefig('gravitational_collapse_verlet.pdf', bbox_inches='tight')
+plt.savefig(f'gravitational_collapse_verlet_{n_steps}.pdf', bbox_inches='tight')
 plt.close()
 
 elapsed_time = time.perf_counter() - start_time
