@@ -8,10 +8,10 @@ import src.pyparticlesim as pps
 import time
 
 # Parameters
-G = 100.0
-softening = 0.01     # Softening is necessary to prevent numerical divergence at small separations.
-dt = 5e-6
-n_steps = 5000
+G = 10.0           # Reduced coupling
+softening = 0.05   # Increased softening
+dt = 1e-5          # Conservative timestep
+n_steps = 10000    # Reaches t = 0.1
 
 # Record start time
 start_time = time.perf_counter()
