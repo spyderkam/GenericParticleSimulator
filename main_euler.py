@@ -14,14 +14,16 @@ positions = [particle.pos for particle in square.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
 
-# Create field
-# ϵ (loosely) sets interaction strength and σ (= part_rad*2) should match particle diameter
-field = pps.SK_Field(G=100)
-
 # Run parameters
 simulation_time = 0
-dt = 5e-6
-n_steps = 5000
+G = 10.0           # Reduced coupling
+softening = 0.05   # Increased softening
+dt = 1e-5          # Conservative timestep
+n_steps = 10000    # Reaches t = 0.1
+
+# Create field
+# ϵ (loosely) sets interaction strength and σ (= part_rad*2) should match particle diameter
+field = pps.SK_Field(G=100, softening=softening)
 
 # Run simulation
 for _ in range(n_steps):
