@@ -1,55 +1,57 @@
-import src.pyparticlesim as pps
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Example: Gravitational collapse with velocity Verlet integration.
+
+Compares initial square structure to final collapsed state.
+"""
+
 import matplotlib.pyplot as plt
-import numpy as np
+import src.pyparticlesim as pps
 import time
 
-part_rad = 1.0  # Particle radius
+# Parameters
+part_rad = 1.0
+G = 10.0
+dt = 0.0001
+n_steps = 5000
 
-# Record the script start time
+# Record start time
 start_time = time.perf_counter()
 
-# Create particle structure
-circle = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
-positions = [particle.pos for particle in circle.particles]
+# Create initial structure
+square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
+initial_positions = [particle.pos.copy() for particle in square.particles]
 
-plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
+# Create gravitational field
+field = pps.SK_Field(G=G, softening=0.05)
 
-# Create field
-# ϵ (loosely) sets interaction strength and σ (= part_rad*2) should match particle diameter
-field = pps.SK_Field(G=100)
-
-# Run parameters
-simulation_time = 0
-dt = 0.000005
-n_steps = 1000
+# Initialize Verlet simulation
+sim = pps.Verlet_Simulation(square.particles, dt, field)
 
 # Run simulation
-for _ in range(n_steps):
-    forces = field.compute_forces(circle.particles)
-    for i, particle in enumerate(circle.particles):
-        particle.apply_forces(dt, forces[i])
-    simulation_time += dt
+sim.run(n_steps)
 
-final_positions = [particle.pos for particle in circle.particles]
+# Extract final positions
+final_positions = [particle.pos for particle in sim.particles]
 
-plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={n_steps*dt}$')
+# Plot initial and final states
+plt.plot([p[0] for p in initial_positions], [p[1] for p in initial_positions], 'bo', label='$t=0$')
+plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={sim.time:.3f}$')
 
 # Plot settings
 plt.grid(True)
 plt.axis('equal')
-plt.xlim(-0.5, 1.5)
-plt.ylim(-0.5, 1.5)
 plt.xlabel(r'$x$-axis', fontsize=15)
 plt.ylabel(r'$y$-axis', fontsize=15)
 plt.legend()
 plt.tight_layout()
 
-# Record the script end time
-end_time = time.perf_counter()
-# Calculate the script duration and print
-elapsed_time = end_time - start_time
-print(f"Simulation runtime: {elapsed_time:.4f} seconds")
-
-#plt.show()
-plt.savefig('before_and_after.pdf', bbox_inches='tight')
+# Save and report runtime
+plt.savefig('gravitational_collapse_verlet.pdf', bbox_inches='tight')
 plt.close()
+
+elapsed_time = time.perf_counter() - start_time
+print(f"Simulation runtime: {elapsed_time:.4f} seconds")
+print(f"Final time: {sim.time:.3f}")
