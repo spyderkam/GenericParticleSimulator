@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-part_rad = 1.0  # Particle radius (no usage outside σ = part_rad*2 yet)
+part_rad = 1.0  # Particle radius (no usage outside of σ = part_rad*2 yet)
 
 # Record the script start time
 start_time = time.perf_counter()
@@ -27,7 +27,7 @@ dt = 1e-5          # Conservative timestep
 n_steps = 10000    # Reaches t = 0.1
 
 # Create field
-# ϵ (loosely) sets interaction strength and σ (= part_rad*2) should match particle diameter
+# ϵ (loosely) sets interaction strength and σ should match particle diameter
 field = pps.SK_Field(G=100, softening=softening)
 
 # Run simulation
