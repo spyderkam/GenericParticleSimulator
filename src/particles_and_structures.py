@@ -9,11 +9,11 @@ import numpy as np
 class Particle:
     """
     2D particle for general simulation framework.
-    
+
     Force accumulator (fx, fy) allows independent force computations 
     to be summed before updating motion.
     """
-    
+
     def __init__(self, position=(0.0, 0.0), velocity=(0.0, 0.0), mass=1.0, radius=1.0):
         """
         Args:
@@ -22,7 +22,7 @@ class Particle:
             mass     : particle mass (default: 1.0)
             radius   : particle radius (default: 1.0)
         """
-        
+
         self.pos = np.array(position, dtype=float)   # [x, y]
         self.vel = np.array(velocity, dtype=float)   # [vx, vy]
         self.mass = mass
@@ -40,7 +40,7 @@ class Particle:
             self._advance_rk4(dt)
         else:
             raise ValueError(f"Unknown integration method: {method}")
-    
+
     def _standard_euler(self, dt):
         """Standard Euler integration (1st-order)."""
         acceleration = self.force/self.mass
@@ -61,11 +61,11 @@ class User_Simulation:
     """
     2D particle simulation engine with force accumulation and time-stepping.
     This class is for advancing particles with user-defined forces (callabale or numeric).
-    
+
     Please note that the step() method is incompatible with SK_Field.compute_forces() which 
     returns pre-computed force arrays instead of per-particle force functions.
     """
-    
+
     def __init__(self, particles, dt):
         self.particles = np.array(particles)  # Array of Particle objects
         self.dt = dt
@@ -82,7 +82,7 @@ class User_Simulation:
                     forces.append(f)  # Pre-computed array
             particle.apply_forces(self.dt, *forces)
         self.time += self.dt
-    
+
     def run(self, n_steps: int, *forces):
         """Run simulation for n_steps."""
         for _ in range(n_steps):
@@ -90,23 +90,40 @@ class User_Simulation:
 
 
 class Particle_Structure:
-    """Generate initial particle configurations in various geometric structures."""
+    """
+    Generate initial particle configurations in various geometric structures.
+
+    Supported structures:
+        - 'circle': Particles distributed on circle perimeter
+        - 'diamond': Particles distributed on diamond perimeter
+        - 'heart': Not yet implemented
+        - 'line': Particles distributed along line segment
+        - 'rectangle': Particles distributed on rectangle perimeter
+        - 'solid_circle': Particles uniformly distributed inside circle
+        - 'solid_diamond': Particles uniformly distributed inside diamond
+    """
 
     def __init__(self, structure='circle', init_points=None, nParticles=10, particle_vel=(0.0, 0.0), particle_mass=1.0, particle_radius=1.0):
         if init_points is None:
             raise ValueError("init_points cannot be None")
-        
+
         # Uniform structure properties
         self.particle_vel = particle_vel
         self.particle_mass = particle_mass
         self.particle_radius = particle_radius
-        
+
         init_points = np.array(init_points).flatten()
-    
+
         if structure == 'circle':
             if len(init_points) != 3:
                 raise ValueError("Circle structure requires 3 values: [center_x, center_y, radius]")
-            self.particles = self.gen_circle(init_points, nParticles)           
+            self.particles = self.gen_circle(init_points, nParticles)
+        elif structure == 'diamond':
+            if len(init_points) != 4:
+                raise ValueError("Diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
+            self.particles = self.gen_diamond(init_points, nParticles)
+        elif structure == 'heart':
+            raise NotImplementedError('Heart structure not implemented yet')
         elif structure == 'line':
             if len(init_points) != 4:
                 raise ValueError("Line structure requires 4 values: [start_x, start_y, end_x, end_y]")
@@ -115,10 +132,6 @@ class Particle_Structure:
             if len(init_points) != 4:
                 raise ValueError("Rectangle structure requires 4 values: [bottom_left_x, bottom_left_y, x_length, y_length]")
             self.particles = self.gen_rectangle(init_points, nParticles)
-        elif structure == 'diamond':
-            if len(init_points) != 4:
-                raise ValueError("Diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
-            self.particles = self.gen_diamond(init_points, nParticles)
         elif structure == 'solid_circle':
             if len(init_points) != 3:
                 raise ValueError("Solid circle structure requires 3 values: [center_x, center_y, radius]")
@@ -127,8 +140,6 @@ class Particle_Structure:
             if len(init_points) != 4:
                 raise ValueError("Solid diamond structure requires 4 values: [center_x, center_y, x_length, y_length]")
             self.particles = self.gen_solid_diamond(init_points, nParticles)
-        elif structure == 'heart':
-            raise NotImplementedError('Heart structure not implemented yet')
         else:
             raise ValueError(f"Unknown structure: {structure}")
 
@@ -145,56 +156,56 @@ class Particle_Structure:
     def gen_diamond(self, init_points, nParticles, tilt=None):
         """
         Generate particles uniformly distributed on diamond perimeter.
-        
+
         Diamond with horizontal and vertical diagonals aligned with axes.
-        
+
         Args:
             init_points: [center_x, center_y, x_length, y_length] where x_length is full width, y_length is full height
             nParticles: total number of particles to distribute
             tilt: reserved for future rotation (not implemented)
         """
-        
+
         center_x, center_y, x_length, y_length = init_points
-        
+
         # Four vertices
         top = np.array([center_x, center_y + y_length/2])
         right = np.array([center_x + x_length/2, center_y])
         bottom = np.array([center_x, center_y - y_length/2])
         left = np.array([center_x - x_length/2, center_y])
-        
+
         # Side lengths
         side_top_right = np.linalg.norm(right - top)
         side_right_bottom = np.linalg.norm(bottom - right)
         side_bottom_left = np.linalg.norm(left - bottom)
         side_left_top = np.linalg.norm(top - left)
         perimeter = side_top_right + side_right_bottom + side_bottom_left + side_left_top
-        
+
         # Distribute particles proportionally
         n_top_right = int(nParticles * side_top_right / perimeter)
         n_right_bottom = int(nParticles * side_right_bottom / perimeter)
         n_bottom_left = int(nParticles * side_bottom_left / perimeter)
         n_left_top = nParticles - (n_top_right + n_right_bottom + n_bottom_left)
-        
+
         # Top to Right
         x_tr = np.linspace(top[0], right[0], n_top_right, endpoint=False)
         y_tr = np.linspace(top[1], right[1], n_top_right, endpoint=False)
-        
+
         # Right to Bottom
         x_rb = np.linspace(right[0], bottom[0], n_right_bottom, endpoint=False)
         y_rb = np.linspace(right[1], bottom[1], n_right_bottom, endpoint=False)
-        
+
         # Bottom to Left
         x_bl = np.linspace(bottom[0], left[0], n_bottom_left, endpoint=False)
         y_bl = np.linspace(bottom[1], left[1], n_bottom_left, endpoint=False)
-        
+
         # Left to Top
         x_lt = np.linspace(left[0], top[0], n_left_top, endpoint=False)
         y_lt = np.linspace(left[1], top[1], n_left_top, endpoint=False)
-        
+
         # Concatenate
         x = np.concatenate([x_tr, x_rb, x_bl, x_lt])
         y = np.concatenate([y_tr, y_rb, y_bl, y_lt])
-        
+
         particles = np.array([
             Particle(
                 position=[x[i], y[i]], 
@@ -203,7 +214,7 @@ class Particle_Structure:
                 radius=self.particle_radius
             ) for i in range(nParticles)
         ])
-        
+
         return particles
 
     def gen_line(self, init_points, nParticles):
@@ -217,9 +228,9 @@ class Particle_Structure:
 
     def gen_rectangle(self, init_points, nParticles, tilt=None):
         """Generate particles uniformly distributed on rectangle perimeter."""
-        
+
         bottom_left_x, bottom_left_y, x_length, y_length = init_points
-        
+
         # Calculate perimeter
         perimeter = 2*(x_length + y_length)
         # Distribute particles proportionally along each side
@@ -242,32 +253,32 @@ class Particle_Structure:
         # Concatenate all sides
         x = np.concatenate([x_bottom, x_right, x_top, x_left])
         y = np.concatenate([y_bottom, y_right, y_top, y_left])
-        
+
         particles = np.array([Particle(position=[x[i], y[i]], velocity=self.particle_vel, mass=self.particle_mass, radius=self.particle_radius) for i in range(nParticles)])
         return particles
 
     def gen_solid_circle(self, init_points, nParticles):
         """
         Generate particles uniformly distributed inside a solid circle.
-        
+
         Uses square root sampling for uniform area distribution.
-        
+
         Args:
             init_points: [center_x, center_y, radius]
             nParticles: total number of particles to distribute
         """
-        
+
         center_x, center_y, radius = init_points
-        
+
         # Uniform sampling in polar coordinates
         # r ~ sqrt(U[0,1]) for uniform area density
         # φ ~ U[0, 2π]
         r = radius * np.sqrt(np.random.uniform(0, 1, nParticles))
         φ = np.random.uniform(0, 2*np.pi, nParticles)
-        
+
         x = center_x + r * np.cos(φ)
         y = center_y + r * np.sin(φ)
-        
+
         particles = np.array([
             Particle(
                 position=[x[i], y[i]], 
@@ -276,29 +287,29 @@ class Particle_Structure:
                 radius=self.particle_radius
             ) for i in range(nParticles)
         ])
-        
+
         return particles
 
     def gen_solid_diamond(self, init_points, nParticles, tilt=None):
         """
         Generate particles uniformly distributed inside a solid diamond.
-        
+
         Uses rejection sampling within bounding box.
-        
+
         Args:
             init_points: [center_x, center_y, x_length, y_length]
             nParticles: total number of particles to distribute
             tilt: reserved for future rotation (not implemented)
         """
-        
+
         center_x, center_y, x_length, y_length = init_points
-        
+
         particles = []
         while len(particles) < nParticles:
             # Sample from bounding box
             x = np.random.uniform(center_x - x_length/2, center_x + x_length/2)
             y = np.random.uniform(center_y - y_length/2, center_y + y_length/2)
-            
+
             # Check if inside diamond: |Δx|/half_width + |Δy|/half_height ≤ 1
             if abs(x - center_x)/(x_length/2) + abs(y - center_y)/(y_length/2) <= 1:
                 particles.append(
@@ -309,5 +320,5 @@ class Particle_Structure:
                         radius=self.particle_radius
                     )
                 )
-        
+
         return np.array(particles)
