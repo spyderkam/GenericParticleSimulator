@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-Example: Gravitational collapse with velocity Verlet integration.
-
-Compares initial square structure to final collapsed state.
-"""
+# Gravitational collapse with velocity Verlet integration.
 
 import matplotlib.pyplot as plt
 import src.pyparticlesim as pps
@@ -14,13 +10,13 @@ import time
 # Parameters
 G = 100.0
 dt = 5e-6
-n_steps = 2000
+n_steps = 5000
 
 # Record start time
 start_time = time.perf_counter()
 
 # Create initial structure
-square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
+square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
 initial_positions = [particle.pos.copy() for particle in square.particles]
 
 # Create gravitational field
