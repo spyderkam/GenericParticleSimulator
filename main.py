@@ -17,14 +17,14 @@ n_steps = 10000    # Reaches t = 0.1
 start_time = time.perf_counter()
 
 # Create initial structure
-square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
-initial_positions = [particle.pos.copy() for particle in square.particles]
+struct = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
+initial_positions = [particle.pos.copy() for particle in struct.particles]
 
 # Create gravitational field
 field = pps.SK_Field(G=G, softening=softening)
 
 # Initialize Verlet simulation
-sim = pps.Verlet_Simulation(square.particles, dt, field)
+sim = pps.Verlet_Simulation(struct.particles, dt, field)
 
 # Run simulation
 sim.run(n_steps)

@@ -9,8 +9,8 @@ part_rad = 1.0  # Particle radius (no usage outside σ = part_rad*2 yet)
 start_time = time.perf_counter()
 
 # Create particle structure
-square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
-positions = [particle.pos for particle in square.particles]
+struct = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
+positions = [particle.pos for particle in struct.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
 
@@ -27,12 +27,12 @@ field = pps.SK_Field(G=100, softening=softening)
 
 # Run simulation
 for _ in range(n_steps):
-    forces = field.compute_forces(square.particles)
-    for i, particle in enumerate(square.particles):
+    forces = field.compute_forces(struct.particles)
+    for i, particle in enumerate(struct.particles):
         particle.apply_forces(dt, forces[i])
     simulation_time += dt
 
-final_positions = [particle.pos for particle in square.particles]
+final_positions = [particle.pos for particle in struct.particles]
 
 plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={n_steps*dt}$')
 
