@@ -9,6 +9,7 @@ import time
 
 # Parameters
 G = 100.0
+softening = 0.01     # Softening is necessary to prevent numerical divergence at small separations.
 dt = 5e-6
 n_steps = 5000
 
@@ -20,7 +21,7 @@ square = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
 initial_positions = [particle.pos.copy() for particle in square.particles]
 
 # Create gravitational field
-field = pps.SK_Field(G=G, softening=0.01)
+field = pps.SK_Field(G=G, softening=softening)
 
 # Initialize Verlet simulation
 sim = pps.Verlet_Simulation(square.particles, dt, field)
@@ -38,6 +39,8 @@ plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*',
 # Plot settings
 plt.grid(True)
 plt.axis('equal')
+plt.xlim(-0.5, 1.5)
+plt.ylim(-0.5, 1.5)
 plt.xlabel(r'$x$-axis', fontsize=15)
 plt.ylabel(r'$y$-axis', fontsize=15)
 plt.legend()
