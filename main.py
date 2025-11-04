@@ -17,7 +17,7 @@ n_steps = 10000    # Reaches t = 0.1
 start_time = time.perf_counter()
 
 # Create initial structure
-struct = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
+struct = pps.Particle_Structure('circle', [0.0, 0.0, 1.0], 100)
 initial_positions = [particle.pos.copy() for particle in struct.particles]
 
 # Create gravitational field
@@ -39,8 +39,8 @@ plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*',
 # Plot settings
 plt.grid(True)
 plt.axis('equal')
-plt.xlim(-0.5, 1.5)
-plt.ylim(-0.5, 1.5)
+plt.xlim(-1.5, 1.5)
+plt.ylim(-1.5, 1.5)
 plt.xlabel(r'$x$-axis', fontsize=15)
 plt.ylabel(r'$y$-axis', fontsize=15)
 plt.legend()

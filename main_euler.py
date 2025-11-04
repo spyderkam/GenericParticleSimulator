@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Gravitational collapse with Euler integration.
+
 import src.pyparticlesim as pps
 import matplotlib.pyplot as plt
 import numpy as np
