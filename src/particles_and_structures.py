@@ -32,50 +32,22 @@ class Particle:
     #def reset_force(self):
     #    self.force = np.array([0.0, 0.0])
 
-    def advance(self, dt, method='euler'):
+    def advance(self, dt, method='standard_euler'):
         """Update position and velocity using accumulated forces."""
-        if method == 'euler':
-            self._advance_euler(dt)
-        elif method == 'verlet':
-            self._advance_verlet(dt)
-            # For Verlet, we'll need to store self.accel_prev (previous acceleration).
-            # We must add that attribute to __init__ and initialize it to zero.
+        if method == 'standard_euler':
+            self._standard_euler(dt)
         elif method == 'rk4':
             self._advance_rk4(dt)
         else:
             raise ValueError(f"Unknown integration method: {method}")
     
-    def _advance_euler(self, dt):
+    def _standard_euler(self, dt):
+        """Standard Euler integration (1st-order)."""
         acceleration = self.force/self.mass
         self.vel += acceleration*dt
         self.pos += self.vel*dt
-    
-    def _advance_verlet(self, dt):
-        """
-        Velocity Verlet integration (2nd-order symplectic).
-        
-        Algorithm:
-            r(t+Δt) = r(t) + v(t)Δt + (1/2)a(t)Δt²
-            v(t+Δt) = v(t) + (1/2)[a(t) + a(t+Δt)]Δt
-        
-        Note: Requires force re-evaluation after position update.
-        Current implementation assumes forces don't change during timestep.
-        For velocity-dependent forces, this needs modification.
-        """
-        accel_current = self.force / self.mass
-        
-        # Update position
-        self.pos += self.vel * dt + 0.5 * accel_current * dt**2
-        
-        # Store current acceleration for velocity update
-        # (In full implementation, forces would be recomputed here)
-        # For now, assume acceleration stays constant over timestep
-        accel_next = accel_current  
-        
-        # Update velocity
-        self.vel += 0.5 * (accel_current + accel_next) * dt
 
-    def apply_forces(self, dt, *forces, method='euler'):
+    def apply_forces(self, dt, *forces, method='standard_euler'):
         """Apply forces, advance particle, then reset force accumulator."""
         forces = np.array(forces)     # Make sure array of forces is a NumPy array
         self.force[:] = 0.0
