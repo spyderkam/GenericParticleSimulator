@@ -21,6 +21,7 @@ class Verlet_Simulation:
             dt: Timestep
             field: SK_Field instance for force computation
         """
+        
         self.particles = np.array(particles)
         self.dt = dt
         self.field = field
@@ -37,12 +38,12 @@ class Verlet_Simulation:
             4. Compute a(t+Δt) = F(t+Δt)/m
             5. Update v(t+Δt) = v(t) + (1/2)[a(t) + a(t+Δt)]Δt
         """
+        
         n = len(self.particles)
         
         # Step 1: Compute and store current accelerations
         forces_old = self.field.compute_forces(self.particles)
-        accel_old = np.array([forces_old[i] / self.particles[i].mass 
-                              for i in range(n)])
+        accel_old = np.array([forces_old[i] / self.particles[i].mass for i in range(n)])
         
         # Step 2: Update positions
         for i, particle in enumerate(self.particles):
