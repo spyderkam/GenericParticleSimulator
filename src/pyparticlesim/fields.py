@@ -3,7 +3,16 @@
 
 __author__ = "Kamyar Modjtahedzadeh"
 
-from src.particles_and_structures import Particle
+try:
+    # If imported from ~/workspace
+    from src.pyparticlesim.particles_and_structures import Particle
+except ImportError:
+    # If imported from ~/workspace/src
+    from pyparticlesim.particles_and_structures import Particle
+except ImportError:
+    # If imported from ~/workspace/src/pyparticlesim
+    from particles_and_structures import Particle
+
 import numpy as np
 
 

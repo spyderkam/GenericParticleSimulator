@@ -3,8 +3,8 @@
 
 # Gravitational collapse with Euler integration.
 
-import src.pyparticlesim as pps
 import matplotlib.pyplot as plt
+import pyparticlesim.pyparticlesim as pps
 import numpy as np
 import time
 
@@ -24,7 +24,7 @@ simulation_time = 0
 G = 10.0           # Reduced coupling
 softening = 0.05   # Increased softening
 dt = 1e-5          # Conservative timestep
-n_steps = 10000    # Reaches t = 0.1
+n_steps = 100      # Reaches t = 0.001
 
 # Create field
 # ϵ (loosely) sets interaction strength and σ should match particle diameter
@@ -57,6 +57,6 @@ end_time = time.perf_counter()
 elapsed_time = end_time - start_time
 print(f"Simulation runtime: {elapsed_time:.4f} seconds")
 
-#plt.show()
-plt.savefig('gravitational_collapse_euler.pdf', bbox_inches='tight')
-plt.close()
+plt.show()
+#plt.savefig('gravitational_collapse_euler.pdf', bbox_inches='tight')
+#plt.close()
