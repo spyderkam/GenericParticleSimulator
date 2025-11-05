@@ -14,21 +14,22 @@ part_rad = 1.0  # Particle radius (no usage outside of σ = part_rad*2 yet)
 start_time = time.perf_counter()
 
 # Create particle structure
-struct = pps.Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100, particle_radius=part_rad)
+struct = pps.Particle_Structure('circle', [0.0, 0.0, 1.0], 100)
 positions = [particle.pos for particle in struct.particles]
 
 plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0$')
 
 # Run parameters
-simulation_time = 0
 G = 10.0           # Reduced coupling
 softening = 0.05   # Increased softening
 dt = 1e-5          # Conservative timestep
-n_steps = 100      # Reaches t = 0.001
+n_steps = 8000     # Reaches t = 0.08
 
 # Create field
 # ϵ (loosely) sets interaction strength and σ should match particle diameter
 field = pps.SK_Field(G=100, softening=softening)
+
+simulation_time = 0
 
 # Run simulation
 for _ in range(n_steps):
@@ -44,8 +45,8 @@ plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*',
 # Plot settings
 plt.grid(True)
 plt.axis('equal')
-plt.xlim(-0.5, 1.5)
-plt.ylim(-0.5, 1.5)
+plt.xlim(-1.5, 1.5)
+plt.ylim(-1.5, 1.5)
 plt.xlabel(r'$x$-axis', fontsize=15)
 plt.ylabel(r'$y$-axis', fontsize=15)
 plt.legend()
@@ -58,5 +59,5 @@ elapsed_time = end_time - start_time
 print(f"Simulation runtime: {elapsed_time:.4f} seconds")
 
 plt.show()
-#plt.savefig('gravitational_collapse_euler.pdf', bbox_inches='tight')
+#plt.savefig(f'gravitational_collapse_euler_{n_steps}.pdf', bbox_inches='tight')
 #plt.close()
