@@ -2,133 +2,197 @@
 
 A general-purpose 2D particle simulation framework written in Python.
 
-**Current Version:** v0.1.0
+**Current Version:** v0.2.0
 
 ## Overview
 
-PyParticleSim provides a modular, extensible framework for simulating systems of many particles. The architecture is designed to handle diverse physics domains including molecular dynamics, debris cloud propagation, n-body gravitational systems, and more.
+PyParticleSim provides a modular, extensible framework for simulating systems of many particles. The architecture is designed to handle diverse physics domains including molecular dynamics, debris cloud propagation, N-body gravitational systems, and more.
 
 ## Features
 
 - **Generalized Particle Class**: Base particle representation with position, velocity, mass, and radius
 - **Force Accumulator Pattern**: Clean separation of force calculations from integration
-- **Euler Integration**: Time-stepping with Euler method (Verlet and RK4 support planned)
-- **Particle Structure Generator**: Create initial configurations (line, circle, rectangle)
-- **Simulation Engine**: Time-stepping loop with `step()` and `run()` methods
+- **Multiple Integration Methods**: Standard Euler and Velocity Verlet (symplectic)
+- **Particle Structure Generator**: Create initial configurations (line, circle, rectangle, diamond, solid shapes)
+- **N-body Force Fields**: Gravitational and Lennard-Jones interactions with softening
+- **Simulation Engines**: User-defined forces and field-based dynamics
 - **NumPy-based**: Efficient numerical computations
 - **Modular Design**: Easy to extend with new force models and integrators
 
 ## Core Components
 
 - `Particle`: Base 2D particle class with force accumulator
-- `Simulation`: Time-stepping engine for advancing particle systems
-- `Particle_Structure`: Geometric initialization (line, circle, rectangle)
-- `ForceField`: Pluggable physics models (coming soon)
+- `User_Simulation`: Time-stepping engine for user-defined forces
+- `Verlet_Simulation`: Velocity Verlet integration for conservative systems
+- `SK_Field`: N-body force field (gravity, Lennard-Jones)
+- `Particle_Structure`: Geometric initialization with multiple shapes
 
-## Requirements
+## Project Structure
 
-- Python 3.11+
-- NumPy
-
-## Installation
-```bash
-pip install numpy
 ```
+workspace/
+├── src/
+│   ├── int_euler.py                     # Integration script examples
+│   ├── int_verlet.py
+│   └── pyparticlesim/
+│       ├── particles_and_structures.py  # Particle, User_Simulation, Particle_Structure
+│       ├── fields.py                    # SK_Field
+│       ├── verlet_simulation.py         # Verlet_Simulation
+│       └── pyparticlesim.py             # Main module (imports all)
+```
+
+**Note:** Package initialization (`__init__.py`) will be implemented in future versions for cleaner imports.
 
 ## Usage
 
-### Basic Particle
+### Particle Structure Generation
+
 ```python
-from src.pyparticlesim import Particle
-import numpy as np
-
-# Create and advance a single particle
-p = Particle(position=[0.0, 0.0], velocity=[1.0, 1.0], mass=1.0)
-f_gravity = np.array([0.0, -9.8])
-f_wind = np.array([1.0, 0.0])
-p.apply_forces(dt=0.1, f_gravity, f_wind)
-print(p.pos, p.vel)
-```
-
-### Particle Structure
-```python
-from src.pyparticlesim import Particle_Structure
-
-# Line of 10 particles
-line = Particle_Structure('line', init_points=[0, 0, 1, 1], nParticles=10)
+from src.pyparticlesim.particles_and_structures import Particle_Structure
 
 # Circle of 20 particles
 circle = Particle_Structure('circle', init_points=[0, 0, 1.5], nParticles=20)
-
-# Rectangle of 16 particles
-rect = Particle_Structure('rectangle', init_points=[0, 0, 2, 1], nParticles=16)
 ```
 
-### Simulation
-```python
-from src.pyparticlesim import Simulation
+Available structures: `'circle'`, `'line'`, `'rectangle'`, `'diamond'`, `'solid_circle'`, `'solid_diamond'`
 
-# Create particle structure
-ps = Particle_Structure('circle', [0, 0, 1.0], 10)
-
-# Initialize and run simulation
-sim = Simulation(ps.particles, Δt=0.01)
-f = np.array([0.0, -9.8])  # Apply gravity
-sim.run(100, f)  # Run for 100 timesteps
-
-# Check final positions
-for particle in sim.particles:
-    print(particle.pos)
-```
-
-### User-Defined Force Functions
-
-Define force functions that return `[Fx, Fy]` arrays:
+### User-Defined Force Simulation
 
 ```python
-def weight(particle: Particle) -> np.ndarray:
-    """Gravitational weight force (no parameters needed)."""
+from src.pyparticlesim.particles_and_structures import Particle_Structure, User_Simulation
+import numpy as np
+
+# Define force functions
+def weight(particle):
+    """Gravitational weight force."""
     return np.array([0.0, -9.81 * particle.mass])
 
-def drag(particle: Particle, b: float) -> np.ndarray:
+def drag(particle, b=0.5):
     """Velocity-dependent drag force."""
     return -b * particle.vel
 
-def spring(particle: Particle, anchor: np.ndarray, k: float, L0: float) -> np.ndarray:
-    """Spring force toward anchor point with rest length L0."""
+def spring(particle, anchor, k=10.0, L0=1.0):
+    """Spring force toward anchor point."""
     delta = particle.pos - anchor
     r = np.linalg.norm(delta)
     if r == 0:
         return np.array([0.0, 0.0])
     return -k * (r - L0) * (delta / r)
 
-# Apply multiple forces
-for particle in sim.particles:
-    particle.apply_forces(
-        dt=0.01,
-        gravity(particle),
-        drag(particle, b=0.5),
-        spring(particle, np.array([0, 0]), k=10.0, L0=1.0)
-    )
+# Create simulation
+ps = Particle_Structure('circle', [0, 0, 1.0], 10)
+sim = User_Simulation(ps.particles, dt=0.01)
+
+# Run with multiple forces
+anchor = np.array([0, 0])
+sim.run(100, weight, lambda p: drag(p, 0.5), lambda p: spring(p, anchor, 10.0, 1.0))
 ```
+
+### N-body Gravitational Simulation
+
+```python
+from src.pyparticlesim.particles_and_structures import Particle_Structure
+from src.pyparticlesim.fields import SK_Field
+from src.pyparticlesim.verlet_simulation import Verlet_Simulation
+
+# Create particle structure
+square = Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
+
+# Create gravitational field with softening
+field = SK_Field(G=100.0, softening=0.05)
+
+# Initialize Velocity Verlet simulation
+sim = Verlet_Simulation(square.particles, dt=1e-5, field=field)
+
+# Run simulation
+sim.run(10000)
+
+# Access final state
+print(f"Final time: {sim.time}")
+for particle in sim.particles:
+    print(particle.pos, particle.vel)
+```
+
+### Lennard-Jones Molecular Dynamics
+
+```python
+from src.pyparticlesim.particles_and_structures import Particle_Structure
+from src.pyparticlesim.fields import SK_Field
+from src.pyparticlesim.verlet_simulation import Verlet_Simulation
+
+# Create molecular structure
+molecules = Particle_Structure('solid_circle', [0, 0, 5.0], 50)
+
+# Create Lennard-Jones field
+field = SK_Field(epsilon=1.0, sigma=2.0)
+
+# Run simulation
+sim = Verlet_Simulation(molecules.particles, dt=0.001, field=field)
+sim.run(5000)
+```
+
+### Combined Force Fields
+
+```python
+from src.pyparticlesim.fields import SK_Field
+
+# Both gravitational and Lennard-Jones forces
+field = SK_Field(G=10.0, softening=0.01, epsilon=1.0, sigma=2.0)
+```
+
+## Integration Methods
+
+### Standard Euler (1st-order)
+- Simple, fast
+- Energy drift over time
+- Use for: short simulations, non-conservative systems
+
+### Velocity Verlet (2nd-order, symplectic)
+- Bounded energy errors
+- Phase space preservation
+- Time-reversible
+- Use for: long simulations, conservative systems, energy conservation critical
+- Note: ~2× computational cost (two force evaluations per step)
 
 ## Project Status
 
-🚧 **v0.1.0** - Active development
+**v0.2.0** - Active development
 
 **Implemented:**
-- Particle class with Euler integration
+- Particle class with standard Euler integration
 - Force accumulator pattern
-- Simulation time-stepping engine
-- Geometric structure generators (line, circle, rectangle)
+- User_Simulation for custom forces
+- Verlet_Simulation for symplectic integration
+- SK_Field for N-body interactions (gravity, Lennard-Jones)
+- Geometric structure generators (6 types including solid shapes)
+- Softening parameter for gravitational singularity prevention
 
 **Planned:**
-- Verlet and RK4 integrators
-- Force field classes (gravity, springs, drag, collisions)
-- Boundary conditions
+- Trajectory recording system
+- Animation tools
 - Energy/momentum diagnostics
-- Visualization utilities
+- Additional force fields (Coulomb, Yukawa)
+- Boundary conditions
+- Collision detection
+- Spatial partitioning optimization
+
+## Academic Paper
+
+This framework supports ongoing research documented in:
+
+**"Numerical Instability in Gravitational N-Body Simulations: A Comparative Analysis"**
+
+Key findings:
+- Euler method exhibits catastrophic energy injection when timesteps are too large
+- Velocity Verlet maintains bounded energy errors through symplectic structure
+- For strongly coupled systems (G ≥ 50), timestep constraints apply regardless of method
+- At long timescales (t=0.1), Verlet preserves orbital structure while Euler produces chaotic collapse
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/spyderkam/GenericParticleSimulator/blob/main/LICENSE) file for details.
+
+## Author
+
+Kamyar Modjtahedzadeh  
+Portfolio: [spyderkam.com](https://spyderkam.com)
