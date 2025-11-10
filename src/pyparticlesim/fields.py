@@ -110,7 +110,7 @@ class SK_Field:
             Models a general attractive interaction between particles with softening to prevent singularities.
             
                 $$
-                \vec{F}_{\mathrm{attr}} = -\frac{k_{\mathrm{a}}}{(r^2 + \epsilon_{\mathrm{a}}^2)^{3/2}} \hat{r}
+                \vec{F}_{\mathrm{attractve}} = -\frac{k_{\mathrm{a}}}{(r^2 + \epsilon_{\mathrm{a}}^2)^{3/2}} \hat{r}
                 $$
             
             where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\mathrm{a}}$ is the 
