@@ -1,7 +1,7 @@
 ```python
 # Parameters
 G = 10.0
-softening = 0.05
+grav_softening = 0.05
 dt = 1e-5
 ```
 

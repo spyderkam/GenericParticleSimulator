@@ -9,7 +9,7 @@ import time
 
 # Parameters
 G = 10.0
-softening = 0.05
+grav_softening = 0.05
 dt = 1e-5
 n_steps = 50000
 
@@ -21,7 +21,7 @@ struct = pps.Particle_Structure('circle', [0.0, 0.0, 1.0], 100)
 initial_positions = [particle.pos.copy() for particle in struct.particles]
 
 # Create gravitational field
-field = pps.SK_Field(G=G, softening=softening)
+field = pps.SK_Field(G=G, grav_softening=grav_softening)
 
 # Initialize Verlet simulation
 sim = pps.Verlet_Simulation(struct.particles, dt, field)

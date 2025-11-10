@@ -21,13 +21,12 @@ plt.plot([p[0] for p in positions], [p[1] for p in positions], 'bo', label='$t=0
 
 # Run parameters
 G = 10.0           # Reduced coupling
-softening = 0.05   # Increased softening
+grav_softening = 0.05   # Increased gravitational softening
 dt = 1e-5          # Conservative timestep
 n_steps = 8000     # Reaches t = 0.08
 
 # Create field
-# ϵ (loosely) sets interaction strength and σ should match particle diameter
-field = pps.SK_Field(G=100, softening=softening)
+field = pps.SK_Field(G=100, grav_softening=grav_softening)
 
 simulation_time = 0
 

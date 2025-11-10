@@ -14,7 +14,7 @@ PyParticleSim provides a modular, extensible framework for simulating systems of
 - **Force Accumulator Pattern**: Clean separation of force calculations from integration
 - **Multiple Integration Methods**: Standard Euler and Velocity Verlet (symplectic)
 - **Particle Structure Generator**: Create initial configurations (line, circle, rectangle, diamond, solid shapes)
-- **N-body Force Fields**: Gravitational and Lennard-Jones interactions with softening
+- **N-body Force Fields**: Gravitational and attractive interactions with softening
 - **Simulation Engines**: User-defined forces and field-based dynamics
 - **NumPy-based**: Efficient numerical computations
 - **Modular Design**: Easy to extend with new force models and integrators
@@ -99,7 +99,7 @@ from src.pyparticlesim.verlet_simulation import Verlet_Simulation
 square = Particle_Structure('rectangle', [0.0, 0.0, 1.0, 1.0], 100)
 
 # Create gravitational field with softening
-field = SK_Field(G=100.0, softening=0.05)
+field = SK_Field(G=100.0, grav_softening=0.05)
 
 # Initialize Velocity Verlet simulation
 sim = Verlet_Simulation(square.particles, dt=1e-5, field=field)
@@ -113,31 +113,13 @@ for particle in sim.particles:
     print(particle.pos, particle.vel)
 ```
 
-### Lennard-Jones Molecular Dynamics
-
-```python
-from src.pyparticlesim.particles_and_structures import Particle_Structure
-from src.pyparticlesim.fields import SK_Field
-from src.pyparticlesim.verlet_simulation import Verlet_Simulation
-
-# Create molecular structure
-molecules = Particle_Structure('solid_circle', [0, 0, 5.0], 50)
-
-# Create Lennard-Jones field
-field = SK_Field(epsilon=1.0, sigma=2.0)
-
-# Run simulation
-sim = Verlet_Simulation(molecules.particles, dt=0.001, field=field)
-sim.run(5000)
-```
-
 ### Combined Force Fields
 
 ```python
 from src.pyparticlesim.fields import SK_Field
 
-# Both gravitational and Lennard-Jones forces
-field = SK_Field(G=10.0, softening=0.01, epsilon=1.0, sigma=2.0)
+# Gravitational and attractive forces
+field = SK_Field(G=10.0, grav_softening=0.01, k_attractive=1.0, attractive_softening=0.01)
 ```
 
 ## Integration Methods
@@ -163,9 +145,9 @@ field = SK_Field(G=10.0, softening=0.01, epsilon=1.0, sigma=2.0)
 - Force accumulator pattern
 - User_Simulation for custom forces
 - Verlet_Simulation for symplectic integration
-- SK_Field for N-body interactions (gravity, Lennard-Jones)
+- SK_Field for N-body interactions (gravity, attractive force)
 - Geometric structure generators (6 types including solid shapes)
-- Softening parameter for gravitational singularity prevention
+- Softening parameters for gravitational and attractive force singularity prevention
 
 **Planned:**
 - Trajectory recording system
