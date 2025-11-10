@@ -78,8 +78,8 @@ class SK_Field:
         if 'G' in self.params:
             f_total += self._gravity(p1, p2, r, r_hat)
 
-        if 'k_attractive' in self.params:
-            f_total += self._attractive(p1, p2, r, r_hat)
+        if 'k_repulsive' in self.params:
+            f_total += self._repulsive(p1, p2, r, r_hat)
 
         return f_total
 
@@ -103,21 +103,24 @@ class SK_Field:
         epsilon = self.params.get('grav_softening', 0.01)
         return -G * p1.mass * p2.mass / (r**2 + epsilon**2) * r_hat
 
-    def _attractive(self, p1, p2, r, r_hat):
+    def _repulsive(self, p1, p2, r, r_hat):
         """
-        Softened attractive force:
+        Softened repulsive force:
 
-            Models a general attractive interaction between particles with softening to prevent singularities.
+            Models a general repulsive interaction between particles with softening to prevent singularities.
+            This force opposes gravitational collapse and can represent electrostatic repulsion, degeneracy 
+            pressure, or contact forces.
             
                 $$
-                \vec{F}_{\mathrm{attractve}} = -\frac{k_{\mathrm{a}}}{(r^2 + \epsilon_{\mathrm{a}}^2)^{3/2}} \hat{r}
+                \vec{F}_{\mathrm{repulsive}} = +\frac{k_{\mathrm{r}}}{(r^2 + \epsilon_{\mathrm{r}}^2)^{3/2}} \hat{r}
                 $$
             
-            where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\mathrm{a}}$ is the 
-            attractive coupling constant, and $\epsilon_{\mathrm{a}}$ is the attractive softening length.
-            Softening prevents numerical divergence at small separations.
+            where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\mathrm{r}}$ is the 
+            repulsive coupling constant, and $\epsilon_{\mathrm{r}}$ is the repulsive softening length.
+            The positive sign creates repulsion (particles push apart). Softening prevents numerical divergence 
+            at small separations.
         """
         
-        k_a = self.params['k_attractive']
-        epsilon_a = self.params.get('attractive_softening', 0.01)
-        return -k_a / (r**2 + epsilon_a**2)**(3/2) * r_hat
+        k_r = self.params['k_repulsive']
+        epsilon_r = self.params.get('repulsive_softening', 0.01)
+        return +k_r / (r**2 + epsilon_r**2)**(3/2) * r_hat

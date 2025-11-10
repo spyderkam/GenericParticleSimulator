@@ -14,7 +14,7 @@ PyParticleSim provides a modular, extensible framework for simulating systems of
 - **Force Accumulator Pattern**: Clean separation of force calculations from integration
 - **Multiple Integration Methods**: Standard Euler and Velocity Verlet (symplectic)
 - **Particle Structure Generator**: Create initial configurations (line, circle, rectangle, diamond, solid shapes)
-- **N-body Force Fields**: Gravitational and attractive interactions with softening
+- **N-body Force Fields**: Gravitational and repulsive interactions with softening
 - **Simulation Engines**: User-defined forces and field-based dynamics
 - **NumPy-based**: Efficient numerical computations
 - **Modular Design**: Easy to extend with new force models and integrators
@@ -118,8 +118,8 @@ for particle in sim.particles:
 ```python
 from src.pyparticlesim.fields import SK_Field
 
-# Gravitational and attractive forces
-field = SK_Field(G=10.0, grav_softening=0.01, k_attractive=1.0, attractive_softening=0.01)
+# Gravitational and repulsive forces (balances collapse)
+field = SK_Field(G=10.0, grav_softening=0.01, k_repulsive=1.0, repulsive_softening=0.01)
 ```
 
 ## Integration Methods
@@ -145,9 +145,9 @@ field = SK_Field(G=10.0, grav_softening=0.01, k_attractive=1.0, attractive_softe
 - Force accumulator pattern
 - User_Simulation for custom forces
 - Verlet_Simulation for symplectic integration
-- SK_Field for N-body interactions (gravity, attractive force)
+- SK_Field for N-body interactions (gravity, repulsive force)
 - Geometric structure generators (6 types including solid shapes)
-- Softening parameters for gravitational and attractive force singularity prevention
+- Softening parameters for gravitational and repulsive force singularity prevention
 
 **Planned:**
 - Trajectory recording system
