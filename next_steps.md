@@ -6,7 +6,21 @@
 
 ## Code Development Priorities
 
-### 1. Trajectory Recording System
+### 1. Package Initialization (`__init__.py`)
+**Status:** Not started  
+**Goal:** Add proper package initialization for cleaner imports
+
+**Implementation:**
+- Create `src/pyparticlesim/__init__.py`
+- Export main classes: `Particle`, `User_Simulation`, `Verlet_Simulation`, `SK_Field`, `Particle_Structure`
+- Enable simplified imports: `from pyparticlesim import Particle` instead of `from src.pyparticlesim.particles_and_structures import Particle`
+- Set package version and metadata
+
+**Deliverable:** Proper Python package structure with `__all__` exports
+
+---
+
+### 2. Trajectory Recording System
 **Status:** Not started  
 **Goal:** Track particle positions over time for analysis and visualization
 
@@ -20,7 +34,7 @@
 
 ---
 
-### 2. Animation Tool
+### 3. Animation Tool
 **Status:** Not started  
 **Goal:** Visualize particle dynamics from recorded trajectories
 
@@ -38,7 +52,7 @@
 
 ---
 
-### 3. Testing and Validation
+### 4. Testing and Validation
 **Status:** Ongoing
 
 **Test cases needed:**
@@ -124,6 +138,7 @@
 ## Timeline Estimates
 
 **Code priorities:**
+- Package initialization: 0.5 hours
 - Trajectory recording: 2-3 hours
 - Animation tool: 3-4 hours
 - Circle simulations: 1 hour
@@ -134,7 +149,7 @@
 - Expand science: 3-4 hours
 - Intro + conclusion: 4-5 hours
 
-**Total estimated effort:** 16-22 hours
+**Total estimated effort:** 16.5-22.5 hours
 
 ---
 
