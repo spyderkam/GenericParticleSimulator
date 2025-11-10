@@ -21,7 +21,7 @@ class SK_Field:
     Stateless field class for computing particle-particle interaction forces.
 
     Computes N-body forces based on provided parameters. Supports multiple
-    force types simultaneously (gravity, Lennard-Jones, springs, etc.).
+    force types simultaneously (gravity, attractive force, etc.).
     """
 
     def __init__(self, **params):
@@ -78,8 +78,8 @@ class SK_Field:
         if 'G' in self.params:
             f_total += self._gravity(p1, p2, r, r_hat)
 
-        if 'epsilon' in self.params and 'sigma' in self.params:
-            f_total += self._lennard_jones(p1, p2, r, r_hat)
+        if 'k_attractive' in self.params:
+            f_total += self._attractive(p1, p2, r, r_hat)
 
         return f_total
 
@@ -103,23 +103,21 @@ class SK_Field:
         epsilon = self.params.get('grav_softening', 0.01)
         return -G * p1.mass * p2.mass / (r**2 + epsilon**2) * r_hat
 
-    def _lennard_jones(self, p1, p2, r, r_hat):
+    def _attractive(self, p1, p2, r, r_hat):
         """
-        Lennard-Jones potential:
+        Softened attractive force:
 
-            Used for modeling van der Waals interactions between neutral atoms/molecules. van der Waals interactions are 
-            weak intermolecular forces from temporary charge fluctuations (dipole interactions). Attraction between 
-            neutral molecules/atoms.
-
+            Models a general attractive interaction between particles with softening to prevent singularities.
+            
                 $$
-                \vec{F}_{\mathrm{LJ}} = \frac{24\epsilon}{r}\left[2\left(\frac{\sigma}{r}\right)^{13} - \left(\frac{\sigma}{r}\right)^7\right]\hat{r}
+                \vec{F}_{\mathrm{attr}} = -\frac{k_{\mathrm{a}}}{(r^2 + \epsilon_{\mathrm{a}}^2)^{3/2}} \hat{r}
                 $$
-
-            where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $\epsilon$ is the depth
-            of potential well (bond strength), and $\sigma$ is the distance where potential is zero (particle diameter).
+            
+            where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\mathrm{a}}$ is the 
+            attractive coupling constant, and $\epsilon_{\mathrm{a}}$ is the attractive softening length.
+            Softening prevents numerical divergence at small separations.
         """
-
-        epsilon = self.params['epsilon']
-        sigma = self.params['sigma']
-        sigma_over_r = sigma / r
-        return 24 * epsilon * (2 * sigma_over_r**13 - sigma_over_r**7) / r * r_hat
+        
+        k_a = self.params['k_attractive']
+        epsilon_a = self.params.get('attractive_softening', 0.01)
+        return -k_a / (r**2 + epsilon_a**2)**(3/2) * r_hat
