@@ -10,12 +10,12 @@ import time
 # Parameters
 G = 10.0                    # Tested with grav_softening=0.05, dt=1e-5
 grav_softening = 0.05       # Tested with G=10, dt=1e-5
-k_zeta = 8.0                # Reduced from 15.0
+k_zeta = 10.0               # Make same as G
 zeta_softening = 0.05
-zeta_amplitude = 0.5        # Reduced from 0.8
-omega_zeta = 30.0           # Longer period, clearer oscillations (~1 cycle at t=0.08)
+zeta_amplitude = 1          # Increased from 0.5
+omega_zeta = 100.0          # Increased from 30
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
-n_steps = 12000
+n_steps = 2000
 
 # Record start time
 start_time = time.perf_counter()
