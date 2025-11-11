@@ -112,17 +112,17 @@ class SK_Field:
             pressure, or contact forces.
             
                 $$
-                \vec{F}_{\mathrm{repulsive}} = +\frac{|k_{\mathrm{r}}|}{r^n + \epsilon_{\mathrm{r}}^n} \hat{r}
+                \vec{F}_{\mathrm{repulsive}} = +\frac{|k_{\mathrm{r}}|}{r^\alpha + \epsilon_{\mathrm{r}}^\alpha} \hat{r}
                 $$
             
             where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\mathrm{r}}$ is the 
-            repulsive coupling constant, $\epsilon_{\mathrm{r}}$ is the repulsive softening length, and $n$ is the 
-            exponent controlling the force law (default: 2 for inverse-square).
+            repulsive coupling constant, $\epsilon_{\mathrm{r}}$ is the repulsive softening length, and $\alpha$ is the 
+            power-law exponent (default: 2 for inverse-square).
             The positive sign creates repulsion (particles push apart). Softening prevents numerical divergence 
             at small separations.
         """
         
         k_r = self.params['k_repulsive']
         epsilon_r = self.params.get('repulsive_softening', 0.01)
-        n = self.params.get('repulsive_exponent', 2)
-        return np.abs(k_r) / (r**n + epsilon_r**n) * r_hat
+        α = self.params.get('repulsive_exponent', 2)
+        return np.abs(k_r) / (r**α + epsilon_r**α) * r_hat
