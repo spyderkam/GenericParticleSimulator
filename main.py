@@ -13,9 +13,9 @@ grav_softening = 0.05       # Tested with G=10, dt=1e-5
 k_zeta = 10.0               # Make same as G
 zeta_softening = 0.05
 zeta_amplitude = 1          # Increased from 0.5
-omega_zeta = 100.0          # Increased from 30 to decrease period
+omega_zeta = 1000.0
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
-n_steps = 12000
+n_steps = 2000
 
 # Record start time
 start_time = time.perf_counter()
