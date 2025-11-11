@@ -157,7 +157,7 @@ class SK_Field:
         k_zeta = self.params['k_zeta']
         epsilon_zeta = self.params.get('zeta_softening', 0.01)
         A = self.params.get('zeta_amplitude', 0.5)
-        omega = self.params.get('zeta_omega', 1.0)
+        omega = self.params.get('omega_zeta', 1.0)
         
         # Compute modulating signal ζ(t)
         zeta_t = 1.0 + A * np.sin(omega * time)

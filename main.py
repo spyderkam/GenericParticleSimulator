@@ -14,7 +14,7 @@ grav_softening = 0.05
 k_zeta = 5.0                # Time-varying repulsive coupling
 zeta_softening = 0.05       # Softening for time-varying force
 zeta_amplitude = 0.8        # Modulation amplitude (0 < A ≤ 1)
-zeta_omega = 50.0           # Angular frequency for oscillations
+omega_zeta = 50.0           # Angular frequency for oscillations
 dt = 1e-5
 n_steps = 8000
 
@@ -32,7 +32,7 @@ field = pps.SK_Field(
     k_zeta=k_zeta,
     zeta_softening=zeta_softening,
     zeta_amplitude=zeta_amplitude,
-    zeta_omega=zeta_omega
+    omega_zeta=omega_zeta
 )
 
 # Initialize Verlet simulation
