@@ -15,7 +15,7 @@ zeta_softening = 0.05
 zeta_amplitude = 0.5        # Reduced from 0.8
 omega_zeta = 30.0           # Longer period, clearer oscillations (~1 cycle at t=0.08)
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
-n_steps = 6000
+n_steps = 10000
 
 # Record start time
 start_time = time.perf_counter()
