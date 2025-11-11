@@ -42,7 +42,7 @@ class Verlet_Simulation:
         n = len(self.particles)
         
         # Step 1: Compute and store current accelerations
-        forces_old = self.field.compute_forces(self.particles)
+        forces_old = self.field.compute_forces(self.particles, self.time)
         accel_old = np.array([forces_old[i] / self.particles[i].mass for i in range(n)])
         
         # Step 2: Update positions
@@ -50,7 +50,7 @@ class Verlet_Simulation:
             particle.pos += particle.vel * self.dt + 0.5 * accel_old[i] * self.dt**2
         
         # Step 3: Recompute forces at new positions
-        forces_new = self.field.compute_forces(self.particles)
+        forces_new = self.field.compute_forces(self.particles, self.time + self.dt)
         
         # Steps 4-5: Update velocities with averaged acceleration
         for i, particle in enumerate(self.particles):
