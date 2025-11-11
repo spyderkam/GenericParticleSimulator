@@ -58,7 +58,8 @@ plt.legend()
 plt.tight_layout()
 
 # Save and report runtime
-plt.savefig(f'breathing_oscillations_verlet_{n_steps}.pdf', bbox_inches='tight')
+output_dir = '~/workspace/src/plots/breath_circ_mod'
+plt.savefig(f'{output_dir}/breathing_oscillations_verlet_{n_steps}.pdf', bbox_inches='tight')
 plt.close()
 
 elapsed_time = time.perf_counter() - start_time
