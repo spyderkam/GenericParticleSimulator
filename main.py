@@ -9,14 +9,14 @@ import src.pyparticlesim.pyparticlesim as pps
 import time
 
 # Parameters
-G = 10.0
-grav_softening = 0.05
-k_zeta = 5.0                # Time-varying repulsive coupling
-zeta_softening = 0.05       # Softening for time-varying force
-zeta_amplitude = 0.8        # Modulation amplitude (0 < A ≤ 1)
-omega_zeta = 50.0           # Angular frequency for oscillations
-dt = 1e-5
-n_steps = 8000
+G = 10.0                    # Tested with grav_softening=0.05, dt=1e-5
+grav_softening = 0.05       # Tested with G=10, dt=1e-5
+k_zeta = 8.0                # Reduced from 15.0
+zeta_softening = 0.05
+zeta_amplitude = 0.5        # Reduced from 0.8
+omega_zeta = 30.0           # Longer period, clearer oscillations (~1 cycle at t=0.08)
+dt = 1e-5                   # Tested with G=10, grav_softening=0.05
+n_steps = 8000              # Keep for testing, for now
 
 # Record start time
 start_time = time.perf_counter()
