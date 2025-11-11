@@ -13,9 +13,9 @@ grav_softening = 0.05       # Tested with G=10, dt=1e-5
 k_zeta = 10.0               # Make same as G
 zeta_softening = 0.05
 zeta_amplitude = 1          # Increased from 0.5
-omega_zeta = 10.0
+omega_zeta = 3.33           # Decrease from G=10
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
-n_steps = 8000
+n_steps = 2000
 
 # Record start time
 start_time = time.perf_counter()
@@ -58,7 +58,7 @@ plt.legend()
 plt.tight_layout()
 
 # Save and report runtime
-output_dir = '~/workspace/src/plots/breath_circ_mod'
+output_dir = './src/plots/breath_circ_mod'
 plt.savefig(f'{output_dir}/breathing_oscillations_verlet_{n_steps}.pdf', bbox_inches='tight')
 plt.close()
 
