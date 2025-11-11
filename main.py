@@ -15,7 +15,7 @@ zeta_softening = 0.05
 zeta_amplitude = 1          # Increased from 0.5
 omega_zeta = 3.33           # Decrease from G=10
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
-n_steps = 4000
+n_steps = 6000
 
 # Record start time
 start_time = time.perf_counter()
