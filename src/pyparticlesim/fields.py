@@ -105,22 +105,24 @@ class SK_Field:
 
     def _repulsive(self, p1, p2, r, r_hat):
         """
-        Softened repulsive force:
+        Softened repulsive force with configurable exponent:
 
             Models a general repulsive interaction between particles with softening to prevent singularities.
             This force opposes gravitational collapse and can represent electrostatic repulsion, degeneracy 
             pressure, or contact forces.
             
                 $$
-                \vec{F}_{\mathrm{repulsive}} = +\frac{k_{\mathrm{r}}}{r^2 + \epsilon_{\mathrm{r}}^2} \hat{r}
+                \vec{F}_{\mathrm{repulsive}} = +\frac{|k_{\mathrm{r}}|}{r^n + \epsilon_{\mathrm{r}}^n} \hat{r}
                 $$
             
             where $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\mathrm{r}}$ is the 
-            repulsive coupling constant, and $\epsilon_{\mathrm{r}}$ is the repulsive softening length.
+            repulsive coupling constant, $\epsilon_{\mathrm{r}}$ is the repulsive softening length, and $n$ is the 
+            exponent controlling the force law (default: 2 for inverse-square).
             The positive sign creates repulsion (particles push apart). Softening prevents numerical divergence 
-            at small separations. This uses the same softening structure as gravity for consistency.
+            at small separations.
         """
         
         k_r = self.params['k_repulsive']
         epsilon_r = self.params.get('repulsive_softening', 0.01)
-        return +k_r / (r**2 + epsilon_r**2) * r_hat
+        n = self.params.get('repulsive_exponent', 2)
+        return np.abs(k_r) / (r**n + epsilon_r**n) * r_hat
