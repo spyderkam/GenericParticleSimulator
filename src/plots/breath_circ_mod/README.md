@@ -21,7 +21,6 @@ The plots are created using the [velocity Verlet](https://github.com/spyderkam/G
 ## Parameters
 
 ```python
-# Parameters
 G = 10.0                    # Tested with grav_softening=0.05, dt=1e-5
 grav_softening = 0.05       # Tested with G=10, dt=1e-5
 G_scaling_factor = 1.0      # Use to scale k_zeta based on G
