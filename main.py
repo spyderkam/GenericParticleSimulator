@@ -8,15 +8,15 @@ import src.pyparticlesim.pyparticlesim as pps
 import time
 
 # Parameters
-G = 10.0                    # Tested with grav_softening=0.05, dt=1e-5
-grav_softening = 0.05       # Tested with G=10, dt=1e-5
-G_scaling_factor = 1/10     # Use to scale k_zeta based on G
+G = 10.0                         # Tested with grav_softening=0.05, dt=1e-5
+grav_softening = 0.05            # Tested with G=10, dt=1e-5
+G_scaling_factor = 0.75          # Use to scale k_zeta based on G. PLAY WITH THIS
 k_zeta = G*G_scaling_factor
 zeta_softening = grav_softening
-zeta_amplitude = 1.0        # Increased from 0.5
-omega_zeta = 78.53982       # ~1 cycle per 8000 steps of dt=1e-5
-dt = 1e-5                   # Tested with G=10, grav_softening=0.05
-n_steps = 6000              # ~3/4 of 1 cycle of ω_ζ=78.53982 dt=1e-5
+zeta_amplitude = 1.0             # Increased from 0.5
+omega_zeta = 157.0796367948966   # ~1 cycle per 4000 steps of dt=1e-5
+dt = 1e-5                        # Tested with G=10, grav_softening=0.05
+n_steps = 4000                   # ~1 of 1 cycle of ω_ζ=157.07963 dt=1e-5
 
 # Record start time
 start_time = time.perf_counter()
@@ -59,7 +59,7 @@ plt.legend()
 plt.tight_layout()
 
 # Save and report runtime
-output_dir = './src/plots/breath_circ_mod'
+output_dir = '.'#$/src/plots/breath_circ_mod'
 plt.savefig(f'{output_dir}/breathing_oscillations_verlet_{n_steps}.pdf', bbox_inches='tight')
 plt.close()
 
