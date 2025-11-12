@@ -18,12 +18,15 @@ $$\mathbf{F}_{ij}(t) = \mathbf{F}_{\mathrm{grav}} + \mathbf{F}_{\zeta}(t)$$
 where:
 
 **Gravitational attraction:**
+
 $$\mathbf{F}_{\mathrm{grav}} = -\frac{Gm_i m_j}{r_{ij}^2 + \epsilon_g^2} \hat{r}_{ij}$$
 
 **Time-varying repulsion:**
+
 $$\mathbf{F}_{\zeta}(t) = +\frac{|k_\zeta| \zeta(t)}{r_{ij}^2 + \epsilon_\zeta^2} \hat{r}_{ij}$$
 
 **Modulation function:**
+
 $$\zeta(t) = 1 + A\sin(\omega_\zeta t)$$
 
 ### 1.2 Parameterization
