@@ -32,4 +32,4 @@ omega_zeta = 80             # ~1 cycle per 8000 steps of dt=1e-5
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
 ```
 
-Please note that the plots are named as "breathing_oscillations_verlet_`<n_steps>`.pdf" where `n_steps` is the number of iterations that the plot was iterrated over. (This can also be deduced from the plot legend.)
+Please note that the plots are named as "breathing_oscillations_verlet_`<n_steps>`.pdf" where `n_steps` is the number of timesteps that the integration was iterrated over. (This can also be deduced from the plot legend.)
