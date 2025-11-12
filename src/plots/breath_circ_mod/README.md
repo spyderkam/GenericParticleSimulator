@@ -25,9 +25,9 @@ G = 10.0                    # Tested with grav_softening=0.05, dt=1e-5
 grav_softening = 0.05       # Tested with G=10, dt=1e-5
 G_scaling_factor = 1/3      # Use to scale k_zeta based on G
 k_zeta = G*G_scaling_factor
-zeta_softening = 0.05
-zeta_amplitude = 1.0        # Increased from 0.5
-omega_zeta = 80             # ~1 cycle per 8000 steps of dt=1e-5
+zeta_softening = grav_softening
+zeta_amplitude = 1.0
+omega_zeta = 78.53982       # ~1 cycle per 8000 steps of dt=1e-5
 dt = 1e-5                   # Tested with G=10, grav_softening=0.05
 ```
 
