@@ -1,21 +1,21 @@
 # Overview of Plots
 
 These plots are of what is originally a ring of 100 identical point particles with unit mass. The governing equation of motion is:
-$$
-  \mathbf{F} _{\mathrm{total}}(t) = \mathbf{F}^\prime _{\mathrm{grav}} + \mathbf{F} _{\zeta}(t)
-$$
+
+$$ \mathbf{F} _{\mathrm{total}}(t) = \mathbf{F}^\prime _{\mathrm{grav}} + \mathbf{F} _{\zeta}(t) $$
+
 where the interparticle gravitational force is
-$$
-    \mathbf{F}^{\prime} _{\mathrm{grav}} = -G \cdot \frac{m_i m_j}{r _{ij}^{2} + \epsilon _{\mathrm{grav}}^2}  \hat{r} _{ij}
-$$
+
+$$ \mathbf{F}^{\prime} _{\mathrm{grav}} = -G \cdot \frac{m_i m_j}{r _{ij}^{2} + \epsilon _{\mathrm{grav}}^2}  \hat{r} _{ij} $$
+
 and the internal modulating repulsive force is:
-$$
-  \mathbf{F} _{\zeta}(t) = \left\vert{k _{\zeta}}\right\vert \cdot \frac{\zeta(t)}{r _{ij}^{2} + \epsilon_{\zeta}^2} \hat{r} {ij}
-$$
+
+$$ \mathbf{F} _{\zeta}(t) = \left\vert{k _{\zeta}}\right\vert \cdot \frac{\zeta(t)}{r _{ij}^{2} + \epsilon_{\zeta}^2} \hat{r} {ij} $$
+
 The modulating signal follows a sinusoidal form:
-$$
-  \zeta(t) = 1 + A\sin(\omega _\zeta t)
-$$
+
+$$ \zeta(t) = 1 + A\sin(\omega _\zeta t) $$
+
 The plots are created using the [velocity Verlet](https://github.com/spyderkam/GenericParticleSimulator/blob/main/src/pyparticlesim/verlet_simulation.py) method/script.
 
 ## Parameters
