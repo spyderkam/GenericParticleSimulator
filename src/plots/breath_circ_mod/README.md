@@ -10,7 +10,7 @@ $$ \mathbf{F}^{\prime} _{\mathrm{grav}} = -G \cdot \frac{m_i m_j}{r _{ij}^{2} + 
 
 and the internal modulating repulsive force is:
 
-$$ \mathbf{F} _{\zeta}(t) = \left\vert{k _{\zeta}}\right\vert \cdot \frac{\zeta(t)}{r _{ij}^{2} + \epsilon_{\zeta}^2} \hat{r} {ij} $$
+$$ \mathbf{F} _{\zeta}(t) = \left\vert{k _{\zeta}}\right\vert \cdot \frac{\zeta(t)}{r _{ij}^{2} + \epsilon_{\zeta}^2} \hat{r} _{ij} $$
 
 The modulating signal follows a sinusoidal form:
 
