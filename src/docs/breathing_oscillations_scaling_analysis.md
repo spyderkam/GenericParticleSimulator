@@ -203,23 +203,25 @@ The **time-averaged force magnitude** involves higher-order terms. A critical sc
 
 ### 6.3 Virial Theorem Considerations
 
-The virial theorem for self-gravitating systems states:
+The **classical virial theorem** for conservative gravitational systems states $2T + U_{\mathrm{grav}} = 0$. However, our system includes a **time-varying repulsive force**, requiring the **generalized virial theorem**:
 
-$$2T + U = 0$$
+$$\frac{d^2I}{dt^2} = 4T - \sum_i \vec{r}_i \cdot \vec{F}_i$$
 
-For our system with time-varying forces:
+where $I = \sum_i m_i r_i^2$ is the moment of inertia and the sum includes all forces (gravitational and repulsive).
 
-$$2T(t) + U_{\mathrm{grav}} + U_{\zeta}(t) = 0$$
+For a **quasi-equilibrium breathing mode** with periodic oscillations and no secular drift, the time-averaged acceleration of the moment of inertia vanishes:
 
-Time-averaging over one period:
+$$\left\langle\frac{d^2I}{dt^2}\right\rangle = 0$$
 
-$$2\langle T\rangle + \langle U_{\mathrm{grav}}\rangle + \lambda G\langle U'_{\zeta}\rangle = 0$$
+This yields the time-averaged virial condition:
 
-where $U'_{\zeta}$ is the geometric part of the repulsive potential. Since $\langle\zeta(t)\rangle = 1$:
+$$2\langle T \rangle = \left\langle\sum_i \vec{r}_i \cdot \left(\vec{F}_{\mathrm{grav},i} + \vec{F}_{\zeta,i}(t)\right)\right\rangle$$
 
-$$\lambda = -\frac{2\langle T\rangle + \langle U_{\mathrm{grav}}\rangle}{\langle U'_{\zeta}\rangle}$$
+For inverse-square forces, the virial $\vec{r} \cdot \vec{F}$ relates to potential energy by scaling, but the **time-dependence of $\zeta(t)$** means:
 
-For a **stable breathing mode**, the virial balance must account for **pulsation energy**.
+$$2\langle T \rangle \neq -\langle U_{\mathrm{grav}}\rangle - \langle U_{\zeta}(t)\rangle$$
+
+The critical scaling factor $\lambda_{\mathrm{crit}}$ ensures the time-averaged virial balance is satisfied while minimizing secular energy drift.
 
 ---
 
