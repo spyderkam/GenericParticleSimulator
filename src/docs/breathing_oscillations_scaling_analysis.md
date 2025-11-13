@@ -358,7 +358,7 @@ The critical scaling factor represents a **dynamic equilibrium constant** that d
 
 ---
 
-**Document Version:** 1.1  
-**Date:** 2024  
-**Author:** Generated for GenericParticleSimulator project  
+**Document Version:** 1.1
+**Date:** 2024
+**Author:** Generated for GenericParticleSimulator project
 **License:** MIT
