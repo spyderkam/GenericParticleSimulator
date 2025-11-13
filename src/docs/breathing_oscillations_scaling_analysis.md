@@ -180,7 +180,7 @@ The effective impedance of repulsive expansion (time-averaged) is:
 $$Z_{\mathrm{rep}} \sim \frac{\lambda G \langle\zeta\rangle}{R_0^2} = \frac{\lambda G}{R_0^2}$$
 
 For **equal impedance** (naive balance):
-$$\lambda = M \approx 1$$
+$$\lambda = M$$
 
 However, the **nonlinear response** of the system to oscillating forces means the effective coupling differs from the linear prediction.
 
@@ -283,19 +283,19 @@ The critical value $\lambda_{\mathrm{crit}}$ **minimizes mode coupling**, mainta
 
 ### 9.1 Physical Interpretation
 
-**$\lambda = 1.0$:**
+**$\lambda = M$:**
 - Time-averaged force balance, but **dynamic imbalance**
 - System sits at parametric resonance boundary
 - Small perturbations grow → secular expansion
 - Energy pumped into system each cycle
 
-**$\lambda > 1.0$:**
+**$\lambda > M$:**
 - Requires careful tuning to avoid resonance
 - Natural frequency shifted away from driving frequency
 - Potential for bounded oscillations
 - Energy approximately conserved over cycles
 
-**$\lambda < 1.0$:**
+**$\lambda < M$:**
 - $\omega_0^2 < 0$ yields imaginary frequencies
 - Exponential instability dominates
 - System collapses rather than oscillates
@@ -318,8 +318,8 @@ where $\beta$ is a system-dependent constant that depends on the geometry, parti
 
 The stability of breathing oscillations in self-gravitating systems with time-varying repulsion depends critically on the scaling factor $\lambda$:
 
-1. **Parametric resonance avoidance:** $\lambda = 1$ places the system at the boundary of Mathieu equation instability
-2. **Nonlinear dynamics:** Time-averaged force balance (naive $\lambda = 1$) neglects velocity-dependent orbital effects
+1. **Parametric resonance avoidance:** $\lambda = M$ places the system at the boundary of Mathieu equation instability
+2. **Nonlinear dynamics:** Time-averaged force balance (naive $\lambda = M$) neglects velocity-dependent orbital effects
 3. **Energy conservation:** Optimal $\lambda$ minimizes net work per cycle, preserving total energy
 4. **Virial theorem modification:** Pulsating systems require correction to static virial balance
 5. **Mode coupling suppression:** Off-resonance tuning prevents energy transfer to non-radial modes
