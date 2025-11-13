@@ -80,7 +80,7 @@ $$\omega_0^2 = \frac{2G}{R_0^3}\left[\lambda - M_{\mathrm{enc}}\right]$$
 
 The driving term is:
 
-$$F_{\mathrm{drive}}(t) = \frac{G\lambda A}{R_0^2}\sin(\omega_\zeta t)$$
+$$f_{\mathrm{drive}}(t) = \frac{G\lambda A}{R_0^2}\sin(\omega_\zeta t)$$
 
 (Note: The driving force is treated as a scalar radial quantity here because the entire analysis in Section 3 has projected onto the radial direction. The full vector form would be $\vec{F}_{\mathrm{drive}}(t) = F_{\mathrm{drive}}(t) \hat{r}$, but since we're solving the 1D radial equation $\ddot{\delta R}$, we work with just the radial component.)
 
