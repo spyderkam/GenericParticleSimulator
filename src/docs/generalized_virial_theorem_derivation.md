@@ -1,4 +1,3 @@
-
 # Derivation of Generalized Virial Theorem
 
 ## Introduction
@@ -86,7 +85,7 @@ $$\vec{F}_i = -\nabla_i U$$
 
 ### Homogeneous Potentials
 
-If $U$ is a **homogeneous function of degree $n$** (meaning $U(\alpha \vec{r}_1, \ldots, \alpha \vec{r}_N) = \alpha^n U(\vec{r}_1, \ldots, \vec{r}_N)$), then by Euler's theorem:
+If $U$ is a **homogeneous function of degree $n$**&mdash;meaning $U(\alpha \vec{r} _1, \dots, \alpha \vec{r} _N) = \alpha^n U(\vec{r} _1, \dots, \vec{r} _N)$&mdash;then by Euler's theorem:
 
 $$\sum_i \vec{r}_i \cdot \nabla_i U = n U$$
 
