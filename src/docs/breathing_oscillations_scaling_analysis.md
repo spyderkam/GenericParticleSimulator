@@ -141,7 +141,7 @@ Otherwise, energy accumulates and the system secularly expands or contracts.
 
 The **adiabatic invariant** for a harmonic oscillator is:
 
-$$I = \frac{E}{\omega_0}$$
+$$\mathcal{J} = \frac{E}{\omega_0}$$
 
 When $\omega_\zeta \approx \omega_0$, the driving frequency matches the natural frequency, violating adiabatic invariance and causing **resonant energy pumping**.
 
