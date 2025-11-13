@@ -1,9 +1,8 @@
-
 # Mathematical Analysis of Force Scaling in Breathing Oscillations
 
 ## Abstract
 
-We present a detailed mathematical analysis of the `G_scaling_factor` parameter in N-body systems with competing gravitational attraction and time-varying repulsion. Through phase space analysis, energy considerations, and perturbative methods, we demonstrate why `G_scaling_factor = 0.75` produces stable periodic oscillations while `G_scaling_factor = 1.0` leads to secular expansion. This work reveals the underlying physics of resonance tuning in self-gravitating systems with modulated internal pressure.
+We present a detailed mathematical analysis of the `G_scaling_factor` parameter in N-body systems with competing gravitational attraction and time-varying repulsion. Through phase space analysis, energy considerations, and perturbative methods, we investigate the stability conditions for periodic oscillations versus secular expansion in self-gravitating systems with modulated internal pressure.
 
 ---
 
@@ -13,17 +12,17 @@ We present a detailed mathematical analysis of the `G_scaling_factor` parameter 
 
 The total force on particle $i$ due to particle $j$ is:
 
-$$\mathbf{F}_{ij}(t) = \mathbf{F}_{\mathrm{grav}} + \mathbf{F}_{\zeta}(t)$$
+$$\vec{F}_{ij}(t) = \vec{F}_{\mathrm{grav}} + \vec{F}_{\zeta}(t)$$
 
 where:
 
 **Gravitational attraction:**
 
-$$\mathbf{F}_{\mathrm{grav}} = -\frac{Gm_i m_j}{r_{ij}^2 + \epsilon_g^2} \hat{r}_{ij}$$
+$$\vec{F}_{\mathrm{grav}} = -\frac{Gm_i m_j}{r_{ij}^2 + \epsilon_g^2} \hat{r}_{ij}$$
 
 **Time-varying repulsion:**
 
-$$\mathbf{F}_{\zeta}(t) = +\frac{|k_\zeta| \zeta(t)}{r_{ij}^2 + \epsilon_\zeta^2} \hat{r}_{ij}$$
+$$\vec{F}_{\zeta}(t) = +\frac{|k_\zeta| \zeta(t)}{r_{ij}^2 + \epsilon_\zeta^2} \hat{r}_{ij}$$
 
 **Modulation function:**
 
@@ -37,7 +36,7 @@ In our system:
 - $A = 1.0$ (full modulation amplitude)
 - $k_\zeta = \lambda G$ where $\lambda$ is the `G_scaling_factor`
 
-The key question: **Why does $\lambda = 0.75$ produce stable oscillations while $\lambda = 1.0$ causes secular expansion?**
+The key question: **What value of $\lambda$ produces stable periodic oscillations?**
 
 ---
 
@@ -77,7 +76,7 @@ $$\ddot{\delta R} + \omega_0^2 \delta R = \frac{G\lambda}{R_0^2}\left[\zeta(t) -
 
 where the natural frequency is:
 
-$$\omega_0^2 = \frac{2G}{R_0^3}\left[M_{\mathrm{enc}} - \lambda\right]$$
+$$\omega_0^2 = \frac{2G}{R_0^3}\left[\lambda - M_{\mathrm{enc}}\right]$$
 
 The driving term is:
 
@@ -99,9 +98,11 @@ $$\omega_\zeta = \frac{2\pi}{0.04} = 157.08 \text{ rad/s} \quad \checkmark$$
 
 The natural frequency depends on $\lambda$:
 
-$$\omega_0^2 = \frac{2G}{R_0^3}\left[M_{\mathrm{enc}} - \lambda\right]$$
+$$\omega_0^2 = \frac{2G}{R_0^3}\left[\lambda - M_{\mathrm{enc}}\right]$$
 
 For $\lambda = 1$ and $M_{\mathrm{enc}} \approx 1$ (order of magnitude), we get $\omega_0^2 \approx 0$, indicating the system is **near-critically balanced**, making it susceptible to secular drift.
+
+When $\lambda < M_{\mathrm{enc}}$, we have $\omega_0^2 < 0$, yielding imaginary frequencies and exponential instability rather than oscillations.
 
 ---
 
@@ -126,7 +127,7 @@ $$U_{\zeta}(t) = +\frac{1}{2}\sum_{i \neq j} \frac{\lambda G \zeta(t)}{r_{ij}^2 
 
 Since $\zeta(t)$ is time-dependent, the system is **non-conservative**. The work done by the repulsive force over one period $T = 2\pi/\omega_\zeta$ is:
 
-$$W_{\mathrm{cycle}} = \oint \mathbf{F}_{\zeta}(t) \cdot d\mathbf{r}$$
+$$W_{\mathrm{cycle}} = \oint \vec{F}_{\zeta}(t) \cdot d\vec{r}$$
 
 For stable oscillations, we require:
 
@@ -158,43 +159,15 @@ The Poincaré section should show a **fixed point**.
 
 The linearized dynamics near equilibrium are described by the Floquet matrix:
 
-$$\mathbf{\Phi}(t) = \begin{pmatrix} R(t) & \dot{R}(t) \\ \dot{R}(t) & \ddot{R}(t) \end{pmatrix}$$
+$$\boldsymbol{\Phi}(t) = \begin{pmatrix} R(t) & \dot{R}(t) \\ \dot{R}(t) & \ddot{R}(t) \end{pmatrix}$$
 
 Stability requires all Floquet multipliers $\mu_i$ satisfy $|\mu_i| \leq 1$. When $\lambda = 1$, the system sits near the **parametric resonance boundary**, where one multiplier approaches $|\mu| = 1$ from above, indicating marginal stability and secular drift.
 
 ---
 
-## 6. Numerical Evidence
+## 6. Analytical Framework
 
-### 6.1 Time Evolution of Radius
-
-Define the mean radius:
-
-$$\bar{R}(t) = \frac{1}{N}\sum_{i=1}^N |\mathbf{r}_i(t)|$$
-
-**Prediction:**
-- **$\lambda = 1.0$:** $\bar{R}(nT) = \bar{R}(0) + \delta \bar{R} \times n$ (linear drift)
-- **$\lambda = 0.75$:** $\bar{R}(nT) \approx \bar{R}(0)$ (bounded oscillation)
-
-From `breathing_oscillations_verlet_4000.pdf`:
-- At $t = 0.04$ (one period), $\lambda = 0.75$ shows near-perfect return to initial configuration
-- With $\lambda = 1.0$, visible expansion occurs
-
-### 6.2 Energy Tracking
-
-The change in total energy per cycle:
-
-$$\Delta E_{\mathrm{cycle}} = E(t + T) - E(t)$$
-
-For $\lambda = 0.75$: $|\Delta E_{\mathrm{cycle}}| \ll E(0)$ (conservative behavior)
-
-For $\lambda = 1.0$: $\Delta E_{\mathrm{cycle}} > 0$ (secular energy injection)
-
----
-
-## 7. Analytical Solution: Why 0.75?
-
-### 7.1 Impedance Matching Argument
+### 6.1 Impedance Matching Argument
 
 The effective "impedance" of gravitational contraction is:
 
@@ -209,7 +182,7 @@ $$\lambda = M \approx 1$$
 
 However, the **nonlinear response** of the system to oscillating forces means the effective coupling differs from the linear prediction.
 
-### 7.2 Effective Force Scaling
+### 6.2 Effective Force Scaling
 
 The RMS force from modulation is:
 
@@ -221,16 +194,12 @@ $$\langle\zeta^2\rangle = \left\langle(1 + \sin\theta)^2\right\rangle = 1 + 2\la
 
 $$F_{\mathrm{RMS}} = \frac{G\lambda}{R_0^2}\sqrt{\frac{3}{2} - 1} = \frac{G\lambda}{R_0^2} \cdot \frac{1}{\sqrt{2}}$$
 
-The **time-averaged force magnitude** (not RMS, but effective over asymmetric cycles) involves higher-order terms. The empirical factor of 0.75 suggests:
-
-$$\lambda_{\mathrm{critical}} = \frac{\langle|F_{\mathrm{grav}}|\rangle}{\langle|F_{\mathrm{rep}}|\rangle} \times \mathcal{C}$$
-
-where $\mathcal{C} \approx 0.75$ is a **nonlinear correction factor** accounting for:
+The **time-averaged force magnitude** involves higher-order terms. A critical scaling factor $\lambda_{\mathrm{critical}}$ must account for:
 1. Velocity-dependent orbital dynamics
 2. Phase lag between force and displacement
 3. Non-sinusoidal response to sinusoidal driving
 
-### 7.3 Virial Theorem Considerations
+### 6.3 Virial Theorem Considerations
 
 The virial theorem for self-gravitating systems states:
 
@@ -248,23 +217,23 @@ where $U'_{\zeta}$ is the geometric part of the repulsive potential. Since $\lan
 
 $$\lambda = -\frac{2\langle T\rangle + \langle U_{\mathrm{grav}}\rangle}{\langle U'_{\zeta}\rangle}$$
 
-For a **stable breathing mode**, the virial balance must account for **pulsation energy**. The factor 0.75 emerges from the ratio of time-averaged kinetic energy in pulsation to the static virial balance.
+For a **stable breathing mode**, the virial balance must account for **pulsation energy**.
 
 ---
 
-## 8. Parametric Resonance Theory
+## 7. Parametric Resonance Theory
 
-### 8.1 Mathieu Equation
+### 7.1 Mathieu Equation
 
 The radial oscillation with time-varying effective "spring constant" is a **Mathieu equation**:
 
 $$\ddot{R} + \left[\omega_0^2 + h\cos(\omega_\zeta t)\right]R = 0$$
 
 where:
-$$\omega_0^2 = \frac{2GM}{R_0^3}(1 - \lambda)$$
+$$\omega_0^2 = \frac{2GM}{R_0^3}(\lambda - 1)$$
 $$h = \frac{2G\lambda A}{R_0^3}$$
 
-### 8.2 Stability Diagram
+### 7.2 Stability Diagram
 
 The Mathieu equation has **stability tongues** in the $(\omega_0^2, h)$ parameter space. Parametric resonance occurs when:
 
@@ -272,25 +241,25 @@ $$\omega_\zeta \approx 2\omega_0/n \quad (n = 1, 2, 3, \ldots)$$
 
 For $\lambda = 1$: $\omega_0 \approx 0$, placing the system **near the principal instability tongue** (n=1).
 
-For $\lambda = 0.75$: $\omega_0^2 = \frac{2GM}{R_0^3}(0.25) \neq 0$, shifting away from resonance.
+For $\lambda > 1$: $\omega_0^2 > 0$, shifting away from resonance and enabling stable oscillations.
 
-### 8.3 Critical Scaling Estimate
+### 7.3 Critical Scaling Estimate
 
-The boundary of the first instability tongue (approximately) is:
+The boundary of the first instability tongue (approximately) depends on the modulation amplitude and system parameters. The critical value $\lambda_{\mathrm{crit}}$ must satisfy:
 
-$$\lambda_{\mathrm{crit}} \approx 1 - \frac{h}{4\omega_0^2}$$
+$$\omega_0^2 = \frac{2G}{R_0^3}(\lambda_{\mathrm{crit}} - M_{\mathrm{enc}}) \neq 0$$
 
-Substituting $h = 2G\lambda A/R_0^3$ and solving self-consistently yields $\lambda \approx 0.7-0.8$, consistent with empirical results.
+to avoid the resonance condition.
 
 ---
 
-## 9. Multi-Particle Corrections
+## 8. Multi-Particle Corrections
 
-### 9.1 Collective Mode Analysis
+### 8.1 Collective Mode Analysis
 
 For $N = 100$ particles in a ring, the **breathing mode** is a collective oscillation where all particles move radially in phase:
 
-$$\mathbf{r}_i(t) = \lambda(t) \mathbf{r}_i(0)$$
+$$\vec{r}_i(t) = \lambda(t) \vec{r}_i(0)$$
 
 The mode frequency is determined by:
 
@@ -298,29 +267,19 @@ $$\ddot{\lambda} = -\frac{G M_{\mathrm{total}}}{\lambda^2 R_0^2} + \frac{\lambda
 
 This is **identical** to the single-particle equation, confirming the breathing mode is the dominant response.
 
-### 9.2 Mode Coupling
+### 8.2 Mode Coupling
 
 Higher-order modes (quadrupole, hexapole, etc.) can couple to the breathing mode if $\lambda \neq \lambda_{\mathrm{crit}}$. This coupling extracts energy from coherent oscillation, causing:
 - **Thermalization** (random motion)
 - **Secular drift** (systematic expansion/contraction)
 
-The value $\lambda = 0.75$ **minimizes mode coupling**, maintaining coherent breathing.
+The critical value $\lambda_{\mathrm{crit}}$ **minimizes mode coupling**, maintaining coherent breathing.
 
 ---
 
-## 10. Comparison with Observations
+## 9. Stability Conditions
 
-### 10.1 Summary of Results
-
-| Parameter | $\lambda = 1.0$ | $\lambda = 0.75$ |
-|-----------|----------------|-----------------|
-| $\omega_0^2$ | $\approx 0$ | $> 0$ |
-| Resonance condition | **Near resonance** | **Off resonance** |
-| $\bar{R}(T)/\bar{R}(0)$ | $> 1$ (expansion) | $\approx 1$ (stable) |
-| $\Delta E_{\mathrm{cycle}}$ | $> 0$ | $\approx 0$ |
-| Poincaré section | **Spiral outward** | **Fixed point** |
-
-### 10.2 Physical Interpretation
+### 9.1 Physical Interpretation
 
 **$\lambda = 1.0$:**
 - Time-averaged force balance, but **dynamic imbalance**
@@ -328,57 +287,48 @@ The value $\lambda = 0.75$ **minimizes mode coupling**, maintaining coherent bre
 - Small perturbations grow → secular expansion
 - Energy pumped into system each cycle
 
-**$\lambda = 0.75$:**
-- Slight time-averaged gravitational dominance
+**$\lambda > 1.0$:**
+- Requires careful tuning to avoid resonance
 - Natural frequency shifted away from driving frequency
-- Oscillations remain bounded
+- Potential for bounded oscillations
 - Energy approximately conserved over cycles
-- **Tuned to avoid parametric resonance**
+
+**$\lambda < 1.0$:**
+- $\omega_0^2 < 0$ yields imaginary frequencies
+- Exponential instability dominates
+- System collapses rather than oscillates
 
 ---
 
-## 11. Generalization to Other Amplitudes
+## 10. Generalization to Other Amplitudes
 
-### 11.1 Scaling Law
+### 10.1 Scaling Law
 
-For arbitrary modulation amplitude $A$, the critical scaling factor is:
+For arbitrary modulation amplitude $A$, the critical scaling factor is expected to follow:
 
-$$\lambda_{\mathrm{crit}}(A) \approx 1 - \beta A^2$$
+$$\lambda_{\mathrm{crit}}(A) \approx 1 + \beta A^2$$
 
-where $\beta$ is a system-dependent constant. For our parameters:
-
-$$\beta \approx 0.25 \implies \lambda_{\mathrm{crit}}(A=1) \approx 0.75 \quad \checkmark$$
-
-### 11.2 Prediction for Other Amplitudes
-
-| $A$ | $\lambda_{\mathrm{crit}}$ (predicted) |
-|-----|--------------------------------------|
-| 0.5 | 0.94 |
-| 0.75 | 0.86 |
-| 1.0 | 0.75 |
-| 1.5 | 0.44 |
-
-**Testable hypothesis:** Running simulations with $A = 0.5$ should find stable oscillations near $\lambda \approx 0.94$.
+where $\beta$ is a system-dependent constant that depends on the geometry, particle number, and softening parameters.
 
 ---
 
-## 12. Conclusions
+## 11. Conclusions
 
-The empirical finding that `G_scaling_factor = 0.75` produces stable breathing oscillations while `G_scaling_factor = 1.0` causes secular expansion is explained by:
+The stability of breathing oscillations in self-gravitating systems with time-varying repulsion depends critically on the scaling factor $\lambda$:
 
 1. **Parametric resonance avoidance:** $\lambda = 1$ places the system at the boundary of Mathieu equation instability
 2. **Nonlinear dynamics:** Time-averaged force balance (naive $\lambda = 1$) neglects velocity-dependent orbital effects
-3. **Energy conservation:** $\lambda = 0.75$ minimizes net work per cycle, preserving total energy
+3. **Energy conservation:** Optimal $\lambda$ minimizes net work per cycle, preserving total energy
 4. **Virial theorem modification:** Pulsating systems require correction to static virial balance
 5. **Mode coupling suppression:** Off-resonance tuning prevents energy transfer to non-radial modes
 
-The factor 0.75 represents a **dynamic equilibrium constant** that differs from the static force balance ratio due to the system's nonlinear response to time-varying forces.
+The critical scaling factor represents a **dynamic equilibrium constant** that differs from the static force balance ratio due to the system's nonlinear response to time-varying forces.
 
 ---
 
-## 13. Future Work
+## 12. Future Work
 
-### 13.1 Recommended Investigations
+### 12.1 Recommended Investigations
 
 1. **Amplitude scan:** Verify $\lambda_{\mathrm{crit}}(A)$ scaling law with $A \in [0.25, 1.5]$
 2. **Energy tracking:** Implement diagnostic to measure $\Delta E_{\mathrm{cycle}}$ quantitatively
@@ -386,7 +336,7 @@ The factor 0.75 represents a **dynamic equilibrium constant** that differs from 
 4. **Softening dependence:** Investigate how $\epsilon$ affects critical $\lambda$
 5. **Multi-period evolution:** Run for $t = 10T$ to detect slow secular trends
 
-### 13.2 Theoretical Extensions
+### 12.2 Theoretical Extensions
 
 1. Derive **exact critical $\lambda$** from Floquet analysis of Mathieu equation
 2. Include **dissipative effects** (if numerical viscosity present)
@@ -406,7 +356,7 @@ The factor 0.75 represents a **dynamic equilibrium constant** that differs from 
 
 ---
 
-**Document Version:** 1.0  
+**Document Version:** 1.1  
 **Date:** 2024  
 **Author:** Generated for GenericParticleSimulator project  
 **License:** MIT
