@@ -96,7 +96,7 @@ $$\delta R_{\mathrm{amp}} = \frac{GA\lambda/R_0^2}{\omega_0^2 - \omega_\zeta^2}$
 
 From simulations, $\omega_\zeta = 157.08$ rad/s corresponds to one oscillation per $n \times dt = 4000 \times 10^{-5} = 0.04$ s, giving:
 
-$$\omega_\zeta = \frac{2\pi}{0.04} = 157.08 \text{ rad/s} \quad \checkmark$$
+$$\omega_\zeta = \frac{2\pi}{0.04} = 157.08 \text{ rad/s}$$
 
 The natural frequency depends on $\lambda$:
 
