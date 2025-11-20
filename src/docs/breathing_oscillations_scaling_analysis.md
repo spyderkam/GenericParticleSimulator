@@ -26,17 +26,19 @@ $$\vec{F}_{\zeta}(t) = +\frac{|k_\zeta| \zeta(t)}{r_{ij}^2 + \epsilon_\zeta^2} \
 
 **Modulation function:**
 
-$$\zeta(t) = 1 + A\sin(\omega_\zeta t)$$
+$$\zeta(t) = 1 + \sin(\omega_\zeta t)$$
 
 ### 1.2 Parameterization
 
 In our system:
 - $m_i = m_j = 1$ (unit masses)
 - $\epsilon_g = \epsilon_\zeta = 0.05$ (equal softening)
-- $A = 1.0$ (full modulation amplitude)
 - $k_\zeta = \lambda G$ where $\lambda$ is the `G_scaling_factor`
+- Modulation amplitude is unity by definition
 
 The key question: **What value of $\lambda$ produces stable periodic oscillations?**
+
+(Note: In the code, this parameter is named `lambda_` to avoid Python keyword conflicts.)
 
 ---
 

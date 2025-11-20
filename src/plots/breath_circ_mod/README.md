@@ -21,13 +21,13 @@ The plots are created using the [velocity Verlet](https://github.com/spyderkam/G
 ## Parameters
 
 ```python
+# Parameters
 G = 10.0                         # Tested with grav_softening=0.05, dt=1e-5
 grav_softening = 0.05            # Tested with G=10, dt=1e-5
-G_scaling_factor = 0.75          # Use to scale k_zeta based on G
-k_zeta = G*G_scaling_factor
+lambda_ = 0.843                  # 0.843 is *seems* good to account for numerical artifacts
+k_zeta = lambda_*G               # Repulsive modulation strength
 zeta_softening = grav_softening
-zeta_amplitude = 1.0             # Increased from 0.5
-omega_zeta = 157.0796367948966   # ~1 cycle per 4000 steps of dt=1e-5
+omega_zeta = 300                 # ~(2*pi*c)/(period*dt)  (highly increased to decrease period)
 dt = 1e-5                        # Tested with G=10, grav_softening=0.05
 ```
 

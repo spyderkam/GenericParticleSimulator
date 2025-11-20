@@ -145,21 +145,19 @@ class SK_Field:
             where the modulating signal follows:
             
                 $$
-                \zeta(t) = 1 + A\sin(\omega t)
+                \zeta(t) = 1 + \sin(\omega t)
                 $$
             
             with $\hat{r} = \frac{\vec{r}_1 - \vec{r}_2}{r}$ and $r = |\vec{r}_1 - \vec{r}_2|$, $k_{\zeta}$ is the 
-            repulsive coupling constant, $\epsilon_{\zeta}$ is the softening length, $A$ is the modulation 
-            amplitude (0 < A ≤ 1), and $\omega$ is the angular frequency.
+            repulsive coupling constant, $\epsilon_{\zeta}$ is the softening length, and $\omega$ is the angular frequency.
             The time-dependent modulation creates breathing oscillations in the particle system.
         """
         
         k_zeta = self.params['k_zeta']
         epsilon_zeta = self.params.get('zeta_softening', 0.01)
-        A = self.params.get('zeta_amplitude', 0.5)
         omega = self.params.get('omega_zeta', 1.0)
         
         # Compute modulating signal ζ(t)
-        zeta_t = 1.0 + A * np.sin(omega * time)
+        zeta_t = 1.0 + np.sin(omega * time)
         
         return np.abs(k_zeta) * zeta_t / (r**2 + epsilon_zeta**2) * r_hat
