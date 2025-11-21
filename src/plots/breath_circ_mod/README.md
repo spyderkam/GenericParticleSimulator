@@ -1,34 +1,35 @@
 # Overview of Plots
 
-These plots are of what is originally a ring of 100 identical point particles with unit mass. The governing equation of motion is:
+These plots show a ring of 100 identical point particles with unit mass under coupled gravitational attraction and sinusoidal repulsive modulation. The governing equation is:
 
-$$ \mathbf{F} _{\mathrm{total}}(t) = \mathbf{F}^\prime _{\mathrm{grav}} + \mathbf{F} _{\zeta}(t) $$
+$$\mathbf{F}*{\mathrm{total}}(t) = \mathbf{F}^\prime*{\mathrm{grav}} + \mathbf{F}_\zeta(t)$$
 
-where the interparticle gravitational force is
+where
 
-$$ \mathbf{F}^{\prime} _{\mathrm{grav}} = -G \cdot \frac{m_i m_j}{r _{ij}^{2} + \epsilon _{\mathrm{grav}}^2}  \hat{r} _{ij} $$
+$$\mathbf{F}^\prime_{\mathrm{grav}} = -G \cdot \frac{m_i m_j}{r_{ij}^2 + \epsilon_{\mathrm{grav}}^2}\hat{r}_{ij}$$
 
-and the internal modulating repulsive force is:
+$$\mathbf{F}*\zeta(t) = |k*\zeta| \cdot \frac{\zeta(t)}{r_{ij}^2 + \epsilon_\zeta^2}\hat{r}_{ij}$$
 
-$$ \mathbf{F} _{\zeta}(t) = \left\vert{k _{\zeta}}\right\vert \cdot \frac{\zeta(t)}{r _{ij}^{2} + \epsilon_{\zeta}^2} \hat{r} _{ij} $$
+with modulating signal:
 
-The modulating signal follows a sinusoidal form:
+$$\zeta(t) = 1 + \sin(\omega_\zeta t)$$
 
-$$ \zeta(t) = 1 + A\sin(\omega _\zeta t) $$
+## Dynamics
 
-The plots are created using the [velocity Verlet](https://github.com/spyderkam/GenericParticleSimulator/blob/main/src/pyparticlesim/verlet_simulation.py) method/script.
+The ring exhibits **transient breathing oscillations**: initial expansion as repulsive modulation dominates, followed by contraction as gravitational potential overwhelms the time-varying repulsive force, culminating in gravitational collapse. The sequence (2000→8000 steps) documents this progression from stable breathing through decay to collapse.
+
+Plots generated using [velocity Verlet](https://github.com/spyderkam/GenericParticleSimulator/blob/main/src/pyparticlesim/verlet_simulation.py) integration.
 
 ## Parameters
 
 ```python
-# Parameters
-G = 10.0                         # Tested with grav_softening=0.05, dt=1e-5
-grav_softening = 0.05            # Tested with G=10, dt=1e-5
-lambda_ = 0.843                  # 0.843 is *seems* good to account for numerical artifacts
-k_zeta = lambda_*G               # Repulsive modulation strength
+G = 10.0
+grav_softening = 0.05
+lambda_ = 0.843
+k_zeta = lambda_ * G
 zeta_softening = grav_softening
-omega_zeta = 300                 # ~(2*pi*c)/(period*dt)  (highly increased to decrease period)
-dt = 1e-5                        # Tested with G=10, grav_softening=0.05
+omega_zeta = 300
+dt = 1e-5
 ```
 
-Please note that the plots are named as "breathing_oscillations_verlet_`<n_steps>`.pdf" where `n_steps` is the number of timesteps that the integration was iterrated over. (This can also be deduced from the plot legend.)
+Filename `breathing_oscillations_verlet_<n_steps>.pdf` indicates timestep count; legend shows simulation end time.​​​​​​​​​​​​​​​​
