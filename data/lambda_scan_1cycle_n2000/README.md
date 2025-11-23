@@ -39,14 +39,25 @@ Linear trend: $R_{\mathrm{avg}} \approx 0.91 + 0.13\lambda$ (no plateau).
 
 $\lambda = 0.737$ is the **only candidate** showing $R_{\mathrm{avg}} = 1.0$ after 1 cycle.
 
-## Next Steps
+### Next Steps
 
 1. **Test λ = 0.737 at 6000 steps** (3 cycles) to check persistence
 2. If stable → implement trajectory recording for $R(t)$ analysis
 3. If unstable → extend scan below λ = 0.5 to find collapse regime
 
-Run this now:
+Run this:
 ```python
 lambda_ = 0.737
 n_steps = 6000  # 3 cycles
+```
+
+### Results
+
+For `λ=0.737: R_avg=0.777, R_std=0.000`, **collapse confirmed.** Ring contracted from R₀ = 1.0 to R_avg = 0.777 by cycle 3. λ = 0.737 shows transient stability for ~1 cycle, then gravitational collapse dominates.
+
+**Action to take:** To stay within the $c \in [2,3]$ stability window, test the stability for:
+
+```python
+lambda_values = np.linspace(0.8, 0.9, 10)
+n_steps = 4000  # c ≈ 1.91
 ```

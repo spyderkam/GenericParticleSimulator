@@ -9,11 +9,11 @@ G = 10.0
 grav_softening = 0.05
 omega_zeta = 300
 dt = 1e-5
-n_steps = 2000  # ~1 cycle at ω_ζ=300 (c ≈ 0.95)
+n_steps = 4000  # c ≈ 1.91
 n_particles = 100
 
 # Scan parameters
-lambda_values = np.linspace(0.5, 2.0, 20)  # Start narrow around suspected region
+lambda_values = np.linspace(0.8, 0.9, 10)
 
 results = []
 
@@ -48,4 +48,4 @@ for lambda_ in lambda_values:
     print(f"λ={lambda_:.3f}: R_avg={R_avg:.3f}, R_std={R_std:.3f}")
 
 # Save results
-np.save('./data/lambda_scan_results.npy', results)
+np.save('./data/lambda_scan_2cycles_n4000/lambda_scan_results.npy', results)
