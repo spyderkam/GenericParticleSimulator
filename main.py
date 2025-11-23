@@ -1,66 +1,51 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Gravitational collapse with time-varying repulsive force (breathing oscillations)
-
-import matplotlib.pyplot as plt
+import numpy as np
 import src.pyparticlesim as pps
-import time
 
-# Parameters
-G = 10.0                         # Tested with grav_softening=0.05, dt=1e-5
-grav_softening = 0.05            # Tested with G=10, dt=1e-5
-lambda_ = 0.843                  # 0.843 is *seems* good to account for numerical artifacts
-k_zeta = lambda_*G               # Repulsive modulation strength
-zeta_softening = grav_softening
-omega_zeta = 300                 # ~(2*pi*c)/(period*dt)  (highly increased to decrease period)
-dt = 1e-5                        # Tested with G=10, grav_softening=0.05
-n_steps = 6000                   # 4000 steps is ~1 cycle of ω_ζ=157.07963
+# Fixed parameters
+G = 10.0
+grav_softening = 0.05
+omega_zeta = 300
+dt = 1e-5
+n_steps = 2000  # ~1 cycle at ω_ζ=300 (c ≈ 0.95)
+n_particles = 100
 
-# Record start time
-start_time = time.perf_counter()
+# Scan parameters
+lambda_values = np.linspace(0.5, 2.0, 20)  # Start narrow around suspected region
 
-# Create initial structure
-struct = pps.Particle_Structure('circle', [0.0, 0.0, 1.0], 100)
-initial_positions = [particle.pos.copy() for particle in struct.particles]
+results = []
 
-# Create field with gravity and time-varying repulsive force
-field = pps.SK_Field(
-    G=G, 
-    grav_softening=grav_softening,
-    omega_zeta=omega_zeta,
-    k_zeta=k_zeta,
-    zeta_softening=zeta_softening,
-)
+for lambda_ in lambda_values:
+    # Create ring
+    struct = pps.Particle_Structure('circle', [0.0, 0.0, 1.0], n_particles)
+    
+    # Create field
+    field = pps.SK_Field(
+        G=G,
+        grav_softening=grav_softening,
+        omega_zeta=omega_zeta,
+        k_zeta=lambda_*G,
+        zeta_softening=grav_softening,
+    )
+    
+    # Run simulation
+    sim = pps.Verlet_Simulation(struct.particles, dt, field)
+    sim.run(n_steps)
+    
+    # Compute diagnostics
+    radii = [np.linalg.norm(p.pos) for p in sim.particles]
+    R_avg = np.mean(radii)
+    R_std = np.std(radii)
+    
+    results.append({
+        'lambda': lambda_,
+        'R_avg': R_avg,
+        'R_std': R_std,
+    })
+    
+    print(f"λ={lambda_:.3f}: R_avg={R_avg:.3f}, R_std={R_std:.3f}")
 
-# Initialize Verlet simulation
-sim = pps.Verlet_Simulation(struct.particles, dt, field)
-
-# Run simulation
-sim.run(n_steps)
-
-# Extract final positions
-final_positions = [particle.pos for particle in sim.particles]
-
-# Plot initial and final states
-plt.plot([p[0] for p in initial_positions], [p[1] for p in initial_positions], 'bo', label='$t=0$')
-plt.plot([p[0] for p in final_positions], [p[1] for p in final_positions], 'r*', label=f'$t={sim.time:.3f}$')
-
-# Plot settings
-plt.grid(True)
-plt.axis('equal')
-plt.xlim(-1.5, 1.5)
-plt.ylim(-1.5, 1.5)
-plt.xlabel(r'$x$-axis', fontsize=15)
-plt.ylabel(r'$y$-axis', fontsize=15)
-plt.legend()
-plt.tight_layout()
-
-# Save and report runtime
-output_dir = '.'#/src/plots/breath_circ_mod'
-plt.savefig(f'{output_dir}/breathing_oscillations_verlet_{n_steps}.pdf', bbox_inches='tight')
-plt.close()
-
-elapsed_time = time.perf_counter() - start_time
-print(f"Simulation runtime: {elapsed_time:.4f} seconds")
-print(f"Final time: {sim.time:.3f}")
+# Save results
+np.save('./data/lambda_scan_results.npy', results)
