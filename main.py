@@ -4,7 +4,7 @@
 # Gravitational collapse with time-varying repulsive force (breathing oscillations)
 
 import matplotlib.pyplot as plt
-import src.pyparticlesim.pyparticlesim as pps
+import src.pyparticlesim as pps
 import time
 
 # Parameters
